@@ -4,7 +4,7 @@
 ---
 
 ## ⚔️ Prologue of the Arcane System  
-In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face, calling forth mighty transformers and vision models to classify hardware components and generate text with the wisdom of ancient neural networks.
+In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face, calling forth a unified AI system that can both **chat intelligently** and **identify computer hardware** from images.
 
 ---
 
@@ -178,13 +178,24 @@ nvidia-smi
 
 ---
 
-## 🛡️ Chapter II – The Dual Powers of This Realm
+## 🛡️ Chapter II – The Unified AI System
 
-### 🎭 Power I: Text Generation with Transformers
-Summon Microsoft Phi-2 for text generation and reasoning tasks.
+This project combines **two powerful AI models** into one unified system:
 
-### 🖼️ Power II: Hardware Component Classification
-Train a Vision Transformer to identify computer hardware components.
+### 🎭 Power I: Chat AI (Microsoft Phi-2)
+- Pre-trained language model (2.7B parameters)
+- Answer questions about hardware, technology, and general topics
+- Explain technical concepts
+- Have natural conversations
+
+### 🖼️ Power II: Hardware Classifier (Vision Transformer)
+- YOU train this model with your hardware images
+- Identifies 5 types of computer components:
+  - **CPU** (Processors)
+  - **GPU** (Graphics Cards)
+  - **RAM** (Memory Modules)
+  - **Motherboard**
+  - **PSU** (Power Supply)
 
 ---
 
@@ -193,13 +204,16 @@ Train a Vision Transformer to identify computer hardware components.
 ```
 AI Model/
 ├── requirements.txt              (Scroll of required incantations)
-├── model_setup.py               (Text generation model)
+├── model_setup.py               (🌟 MAIN UNIFIED SYSTEM - Chat + Hardware ID)
 ├── train_vit_tiny.py            (Hardware classifier training)
-├── test_vit_tiny.py             (Hardware classifier testing)
+├── test_vit_tiny.py             (Hardware classifier testing - standalone)
 ├── split_dataset.py             (Dataset preparation script)
 ├── check_gpu.py                 (GPU verification tool)
 ├── GPU_SETUP_COMPLETE.md        (GPU optimization guide)
 ├── README.md                    (This noble decree)
+│
+├── models/
+│   └── best_vit_model.pth       (Your trained vision model - created after training)
 │
 └── dataset/
     ├── train/                   (Training images - 80%)
@@ -218,31 +232,12 @@ AI Model/
 
 ---
 
-## 🦾 The Champions of Thy Realm  
+## 🎯 Chapter IV – Complete Workflow (Start Here!)
 
-### 🏰 Microsoft Phi-2 (2.7B parameters, ~3GB)  
-A noble text generation warrior — strong, efficient, and well-suited for:
-- Text generation  
-- Question answering  
-- Logical reasoning  
-- General knowledge tasks  
+### 📋 Phase 1: Prepare Your Dataset (Required for Hardware ID)
 
-### 👁️ Vision Transformer (ViT-Base)
-A keen-eyed classifier trained to recognize:
-- CPUs (Intel, AMD processors)
-- GPUs (Graphics cards)
-- RAM (Memory modules)
-- Motherboards
-- PSUs (Power supplies)
-
----
-
-## 🎯 Chapter IV – The Complete Quest Workflow
-
-### 🖼️ Quest I: Hardware Component Classification
-
-#### Step 1: Prepare Your Image Dataset
-Collect 20-50+ images for each hardware category. Place them ALL in the train folders:
+#### Step 1: Collect Hardware Images
+Gather 20-50+ images for each hardware category:
 
 ```bash
 dataset/train/cpu/           ← Add CPU images here
@@ -259,6 +254,7 @@ dataset/train/psu/           ← Add PSU images here
 - Your own hardware photos
 
 #### Step 2: Check Your Dataset
+
 **Windows:**
 ```bash
 python split_dataset.py --check
@@ -270,6 +266,7 @@ python3 split_dataset.py --check
 ```
 
 #### Step 3: Split Dataset (80% train, 20% validation)
+
 **Windows:**
 ```bash
 python split_dataset.py --split
@@ -280,9 +277,10 @@ python split_dataset.py --split
 python3 split_dataset.py --split
 ```
 
-This automatically moves 20% of images to validation folders.
+---
 
-#### Step 4: Train the Hardware Classifier
+### 🎓 Phase 2: Train the Vision Model
+
 **Windows:**
 ```bash
 python train_vit_tiny.py
@@ -293,18 +291,138 @@ python train_vit_tiny.py
 python3 train_vit_tiny.py
 ```
 
-**Training will show:**
-- Your GPU being used (GTX 1660 Super / RTX 2070)
-- Training progress and accuracy
-- Validation accuracy after each epoch
-- Best model saved automatically to `models/best_vit_model.pth`
+**What happens during training:**
+- Uses your GTX 1660 Super / RTX 2070 GPU automatically
+- Shows training progress and accuracy
+- Validates after each epoch
+- Saves best model to `models/best_vit_model.pth`
 
 **Expected Training Time:**
-- 20 images/class (100 total): ~2-3 minutes on GTX 1660 Super
+- 20 images/class (100 total): ~2-3 minutes
 - 50 images/class (250 total): ~5-8 minutes
 - 100 images/class (500 total): ~10-15 minutes
 
-#### Step 5: Test Your Trained Model
+---
+
+### 🚀 Phase 3: Use the Unified AI System
+
+## 🌟 **MAIN COMMAND - Start the Unified System**
+
+**Windows:**
+```bash
+python model_setup.py
+```
+
+**Linux:**
+```bash
+python3 model_setup.py
+```
+
+**First run:** Downloads Microsoft Phi-2 model (~3GB). May take several minutes.
+
+---
+
+## 💬 Using the Unified System
+
+Once running, you'll see:
+```
+🤖 UNIFIED AI SYSTEM - Chat + Hardware Identification
+================================================================================
+
+📚 How This Works:
+  1️⃣ Chat Model (Phi-2): Already trained, ready to chat
+  2️⃣ Vision Model: YOU trained this with hardware images
+
+Commands:
+  💬 Chat: Type your message
+  🖼️ Identify: identify <image_path>
+  ⚙️ Other: 'quit', 'clear', 'help', 'status'
+================================================================================
+
+🖥️ Using device: cuda (NVIDIA GeForce GTX 1660 SUPER)
+
+Loading AI models...
+✅ System ready!
+
+You: _
+```
+
+### 💬 Chat Examples:
+
+```
+You: What is a GPU?
+🤖 Assistant: A GPU (Graphics Processing Unit) is a specialized processor designed for rendering graphics and parallel computing tasks...
+
+You: How much RAM do I need for gaming?
+🤖 Assistant: For modern gaming in 2024, I recommend at least 16GB of RAM...
+
+You: Explain machine learning
+🤖 Assistant: Machine learning is a subset of artificial intelligence...
+```
+
+### 🖼️ Hardware Identification Examples:
+
+```
+You: identify dataset/val/cpu/intel_i9.jpg
+
+🔍 Analyzing: dataset/val/cpu/intel_i9.jpg
+⏳ Processing...
+
+🎯 Prediction: CPU
+📊 Confidence: 96.78%
+
+📈 Top 3 Predictions:
+   1. CPU: 96.78%
+   2. MOTHERBOARD: 2.15%
+   3. GPU: 1.07%
+
+🤖 AI Explanation:
+   A CPU (Central Processing Unit) is the primary processor that executes 
+   instructions and performs calculations. It acts as the brain of the 
+   computer system.
+```
+
+**More identification examples:**
+```
+You: identify C:\Users\Matthew Dee\Pictures\my_gpu.jpg
+You: identify dataset/train/ram/corsair_vengeance.png
+You: identify D:\Downloads\hardware_photo.jpg
+```
+
+### ⚙️ System Commands:
+
+```
+You: status
+📊 System Status:
+   Chat Model: ✅ Ready (Pre-trained Phi-2)
+   Vision Model: ✅ Trained
+   GPU: NVIDIA GeForce GTX 1660 SUPER
+
+You: help
+💬 Chat Commands:
+   - Type message to chat with AI
+
+🖼️ Hardware Identification:
+   - identify <path> - Classify hardware image
+   - Example: identify dataset/val/cpu/image.jpg
+
+⚙️ System Commands:
+   - status - Check system status
+   - clear - Reset conversation
+   - quit - Exit system
+
+You: clear
+🧹 Conversation history cleared!
+
+You: quit
+👋 Goodbye!
+```
+
+---
+
+## 🧪 Optional: Test Vision Model Separately
+
+If you want to test the vision model without the chat interface:
 
 **Test a single image:**
 
@@ -344,52 +462,13 @@ python3 test_vit_tiny.py --interactive
 
 ---
 
-### 📝 Quest II: Text Generation
-
-#### Awaken the Text Generation Model
-
-**Windows:**
-```bash
-python model_setup.py
-```
-
-**Linux:**
-```bash
-python3 model_setup.py
-```
-
-**First run warning:**  
-Downloads ~3GB model (Microsoft Phi-2). May take several minutes.
-
-#### Use in Your Own Script
-```python
-from model_setup import setup_model, generate_text
-
-model, tokenizer = setup_model()
-result = generate_text(model, tokenizer, "Explain what a GPU is", max_length=150)
-print(result)
-```
-
-#### Summon a Different Text Model
-```python
-# In model_setup.py, change the model_name:
-model, tokenizer = setup_model(model_name="google/flan-t5-large")
-```
-
-**Other Available Champions:**
-- `google/flan-t5-large` (~3GB) - Q&A and summarization
-- `tiiuae/falcon-rw-1b` (~2.5GB) - Lightweight and fast
-- `stabilityai/stablelm-2-1_6b` (~3.2GB) - Modern versatile model
-
----
-
 ## 🏰 Chapter V – Demands of the System  
 
 ### Minimum Requirements
 - **CPU:** Multi-core processor (Intel i5/Ryzen 5 or better)
 - **RAM:** 8GB minimum (16GB recommended)
 - **Storage:** 10GB free space
-- **OS:** Windows 10/11 (with Long Paths enabled)
+- **OS:** Windows 10/11 or Linux
 
 ### Recommended for GPU Training
 - **GPU:** NVIDIA GTX 1660 Super or RTX 2070 (or better)
@@ -406,7 +485,7 @@ model, tokenizer = setup_model(model_name="google/flan-t5-large")
 
 ## 🛠️ Chapter VI – Remedies for Troublesome Spirits  
 
-### ⚠️ "Could not install packages due to Long Path"
+### ⚠️ "Could not install packages due to Long Path" (Windows)
 **Solution:** Run PowerShell as Admin:
 ```powershell
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
@@ -436,6 +515,18 @@ pip uninstall torch torchvision torchaudio
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 python3 check_gpu.py
 ```
+
+### ⚠️ "Vision model not trained yet" message
+**Solution:** You need to train the vision model first:
+```bash
+# Windows
+python train_vit_tiny.py
+
+# Linux
+python3 train_vit_tiny.py
+```
+
+The chat will still work, but hardware identification won't work until trained.
 
 ### ⚠️ Out of Memory (OOM) Error
 **Solutions:**
@@ -496,69 +587,68 @@ nvidia-smi -l 1
    - Use data augmentation
    - Train for more epochs
 
-3. **Create applications:**
-   - Web interface for hardware identification
-   - Mobile app using the model
-   - Automated PC builder recommendation system
+3. **Deploy your system:**
+   - Create web interface with Streamlit
+   - Build Discord bot
+   - Make mobile app
+   - Host on cloud server
 
-4. **Combine both models:**
-   - Use Vision model to identify hardware
-   - Use Text model to explain specifications
+4. **Advanced features:**
+   - Multi-language support
+   - Voice chat integration
+   - Batch image processing
+   - Hardware recommendation system
 
 ---
 
 ## 📜 Quick Command Reference
 
-### 🪟 Windows Commands
+### 🎯 Main Commands (What You'll Use Most)
+
+**🪟 Windows:**
 ```bash
-# Setup & Verification
+# 1. Setup (one-time)
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 pip install transformers sentencepiece pillow
 python check_gpu.py
 
-# Dataset Management
-python split_dataset.py --check
+# 2. Prepare dataset
 python split_dataset.py --split
 
-# Training
+# 3. Train vision model
 python train_vit_tiny.py
 
-# Testing
-python test_vit_tiny.py --image path/to/image.jpg
-python test_vit_tiny.py --directory path/to/folder
-python test_vit_tiny.py --interactive
-
-# Text Generation
+# 4. 🌟 USE THE UNIFIED SYSTEM 🌟
 python model_setup.py
 ```
 
-### 🐧 Linux Commands
+**🐧 Linux:**
 ```bash
-# Setup & Verification
+# 1. Setup (one-time)
 python3 -m venv ai_env
 source ai_env/bin/activate
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 pip install transformers sentencepiece pillow
 python3 check_gpu.py
-nvidia-smi  # Check GPU
 
-# Dataset Management
-python3 split_dataset.py --check
+# 2. Prepare dataset
 python3 split_dataset.py --split
 
-# Training
+# 3. Train vision model
 python3 train_vit_tiny.py
 
-# Testing
-python3 test_vit_tiny.py --image path/to/image.jpg
-python3 test_vit_tiny.py --directory path/to/folder
-python3 test_vit_tiny.py --interactive
-
-# Text Generation
+# 4. 🌟 USE THE UNIFIED SYSTEM 🌟
 python3 model_setup.py
+```
 
-# Monitor GPU during training
-nvidia-smi -l 1  # Updates every second
+### 📋 Complete Workflow Summary
+
+```
+Step 1: Install dependencies ✅
+Step 2: Add 20+ images per hardware category to dataset/train/ ✅
+Step 3: python split_dataset.py --split ✅
+Step 4: python train_vit_tiny.py ✅
+Step 5: python model_setup.py ✅ ← START USING YOUR AI!
 ```
 
 ---
@@ -571,10 +661,40 @@ This project demonstrates:
 - ✅ Computer vision with Vision Transformers
 - ✅ Natural language processing with transformers
 - ✅ GPU acceleration and optimization
-- ✅ Practical AI application (hardware classification)
+- ✅ Practical AI application (unified chat + image classification)
+- ✅ Interactive command-line interface
+
+### What Makes This Project Special:
+1. **Two AI Models in One System** - Chat and Vision combined
+2. **Real-world Application** - Identify actual computer hardware
+3. **GPU Optimization** - Uses CUDA acceleration
+4. **Modern Architecture** - Transformers for both text and vision
+5. **Interactive Experience** - Natural conversation + image analysis
 
 ---
 
 *May this project serve thee well, Almighty Bossman 👑 — ruler of code, conqueror of circuits, and sovereign of machine-learning realms.*
 
 *Forged with PyTorch 2.5.1, Transformers 4.57.1, and the power of NVIDIA Turing architecture* ⚡
+
+---
+
+## 🎮 Quick Start for Impatient Warriors
+
+**Too long? Here's the speedrun:**
+```bash
+# Install
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install transformers sentencepiece pillow
+
+# Add images to dataset/train/cpu, gpu, ram, motherboard, psu
+
+# Prepare and train
+python split_dataset.py --split
+python train_vit_tiny.py
+
+# Use the system!
+python model_setup.py
+```
+
+Type `help` once inside for commands. Type `identify path/to/image.jpg` to identify hardware. Chat normally for questions. GG! 🎯
