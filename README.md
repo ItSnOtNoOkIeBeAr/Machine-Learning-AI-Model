@@ -483,6 +483,45 @@ python3 test_vit_tiny.py --interactive
 
 ---
 
+## ⚡ VRAM Usage Estimates & Recommendations
+
+Short practical estimates for the models used in this project.
+
+- Chat model — Microsoft Phi‑2 (~2.7B parameters)
+  - FP16 weights ≈ 5.4 GB
+  - Inference runtime (weights + kv‑cache + activations) ≈ 6.5–9+ GB
+  - Practical: fully on‑GPU requires ≈ 8 GB or more; grows with context length
+
+- Vision model — ViT (fine‑tuned for 5 classes)
+  - FP16 weights ≈ 0.16–0.20 GB
+  - Inference overhead ≈ 0.2–0.6 GB
+  - Practical: ≈ 0.5–0.9 GB
+
+- Combined (both resident on GPU)
+  - Realistic total ≈ 7.5–10+ GB
+  - Conclusion: 6 GB GPUs (GTX 1660 Super) will likely NOT fit Phi‑2 comfortably if both are fully on GPU
+
+Recommended options when GPU VRAM is limited:
+1. 8‑bit quantization (bitsandbytes): reduces chat model VRAM to ~2–3 GB.
+   - Install: `pip install bitsandbytes accelerate safetensors`
+   - Load with `load_in_8bit=True` and `device_map="auto"`.
+2. Device offloading / automatic device map: keep parts on CPU and only use GPU for hot layers.
+3. Run chat model on CPU and keep vision model on GPU (vision uses little VRAM).
+4. Use a smaller chat model or hosted inference (Hugging Face Inference API) if local resources are insufficient.
+
+Quick commands:
+```bash
+# Install 8-bit tooling
+pip install bitsandbytes accelerate safetensors
+
+# Example: reinstall PyTorch with CUDA if needed (Windows)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+Add these options to your workflow based on available VRAM.  
+
+---
+
 ## 🛠️ Chapter VI – Remedies for Troublesome Spirits  
 
 ### ⚠️ "Could not install packages due to Long Path" (Windows)
