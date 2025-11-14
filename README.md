@@ -13,7 +13,9 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 ### Prerequisites
 Before thy journey begins, ensure that Python 3.8+ dwells upon thy machine.
 
-### Install All Dependencies
+---
+
+### 🪟 Windows Installation
 
 #### Step 1: Enable Windows Long Paths (One-time setup)
 Open PowerShell as **Administrator** and run:
@@ -38,9 +40,140 @@ pip install torch torchvision torchaudio
 pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn
 ```
 
-#### Verify GPU Setup
+#### Step 4: Verify GPU Setup
 ```bash
 python check_gpu.py
+```
+
+---
+
+### 🐧 Linux Installation (Ubuntu/Debian/Mint/Arch/Fedora)
+
+#### Step 1: Update System and Install Python
+**Ubuntu/Debian/Mint:**
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-venv git
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -Syu
+sudo pacman -S python python-pip git
+```
+
+**Fedora:**
+```bash
+sudo dnf update
+sudo dnf install python3 python3-pip git
+```
+
+#### Step 2: Install NVIDIA Drivers (for GPU acceleration)
+**Ubuntu/Debian/Mint:**
+```bash
+# Check if you have NVIDIA GPU
+lspci | grep -i nvidia
+
+# Install NVIDIA drivers
+sudo apt install nvidia-driver-535
+
+# Reboot after installation
+sudo reboot
+```
+
+**Arch Linux:**
+```bash
+# Install NVIDIA drivers
+sudo pacman -S nvidia nvidia-utils
+
+# Reboot
+sudo reboot
+```
+
+**Fedora:**
+```bash
+# Enable RPM Fusion repositories
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+# Install NVIDIA drivers
+sudo dnf install akmod-nvidia
+sudo reboot
+```
+
+#### Step 3: Create Virtual Environment (Recommended)
+```bash
+# Create virtual environment
+python3 -m venv ai_env
+
+# Activate it
+source ai_env/bin/activate
+
+# Your terminal should now show (ai_env)
+```
+
+#### Step 4: Install PyTorch with CUDA
+For NVIDIA GPUs:
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+For CPU-only:
+```bash
+pip install torch torchvision torchaudio
+```
+
+#### Step 5: Install Additional Dependencies
+```bash
+pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn
+```
+
+#### Step 6: Verify GPU Setup
+```bash
+python check_gpu.py
+```
+
+#### Step 7: Check CUDA and GPU
+```bash
+# Check NVIDIA driver installation
+nvidia-smi
+
+# Should show your GPU (GTX 1660 Super, RTX 2070, etc.)
+```
+
+---
+
+### 🎯 Quick Start Commands by OS
+
+**Windows:**
+```bash
+# Install PyTorch + CUDA
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Install other packages
+pip install transformers sentencepiece pillow
+
+# Verify GPU
+python check_gpu.py
+```
+
+**Linux:**
+```bash
+# Create and activate virtual environment
+python3 -m venv ai_env
+source ai_env/bin/activate
+
+# Install PyTorch + CUDA
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Install other packages
+pip install transformers sentencepiece pillow
+
+# Verify GPU
+python check_gpu.py
+
+# Check NVIDIA driver
+nvidia-smi
 ```
 
 ---
@@ -126,20 +259,38 @@ dataset/train/psu/           ← Add PSU images here
 - Your own hardware photos
 
 #### Step 2: Check Your Dataset
+**Windows:**
 ```bash
 python split_dataset.py --check
 ```
 
+**Linux:**
+```bash
+python3 split_dataset.py --check
+```
+
 #### Step 3: Split Dataset (80% train, 20% validation)
+**Windows:**
 ```bash
 python split_dataset.py --split
+```
+
+**Linux:**
+```bash
+python3 split_dataset.py --split
 ```
 
 This automatically moves 20% of images to validation folders.
 
 #### Step 4: Train the Hardware Classifier
+**Windows:**
 ```bash
 python train_vit_tiny.py
+```
+
+**Linux:**
+```bash
+python3 train_vit_tiny.py
 ```
 
 **Training will show:**
@@ -156,18 +307,39 @@ python train_vit_tiny.py
 #### Step 5: Test Your Trained Model
 
 **Test a single image:**
+
+*Windows:*
 ```bash
 python test_vit_tiny.py --image dataset/val/cpu/test_image.jpg
 ```
 
+*Linux:*
+```bash
+python3 test_vit_tiny.py --image dataset/val/cpu/test_image.jpg
+```
+
 **Test entire folder:**
+
+*Windows:*
 ```bash
 python test_vit_tiny.py --directory dataset/val/gpu
 ```
 
+*Linux:*
+```bash
+python3 test_vit_tiny.py --directory dataset/val/gpu
+```
+
 **Interactive mode:**
+
+*Windows:*
 ```bash
 python test_vit_tiny.py --interactive
+```
+
+*Linux:*
+```bash
+python3 test_vit_tiny.py --interactive
 ```
 
 ---
@@ -175,8 +347,15 @@ python test_vit_tiny.py --interactive
 ### 📝 Quest II: Text Generation
 
 #### Awaken the Text Generation Model
+
+**Windows:**
 ```bash
 python model_setup.py
+```
+
+**Linux:**
+```bash
+python3 model_setup.py
 ```
 
 **First run warning:**  
@@ -235,14 +414,27 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 Then **restart your computer**.
 
 ### ⚠️ "CUDA not available" (GPU not detected)
-**Solution:** Reinstall PyTorch with CUDA:
+
+**Windows Solution:**
 ```bash
 pip uninstall torch torchvision torchaudio
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-```
-Then verify:
-```bash
 python check_gpu.py
+```
+
+**Linux Solution:**
+```bash
+# Check NVIDIA driver first
+nvidia-smi
+
+# If driver not found, install it (Ubuntu/Debian/Mint)
+sudo apt install nvidia-driver-535
+sudo reboot
+
+# Then reinstall PyTorch with CUDA
+pip uninstall torch torchvision torchaudio
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+python3 check_gpu.py
 ```
 
 ### ⚠️ Out of Memory (OOM) Error
@@ -255,14 +447,26 @@ python check_gpu.py
 **Solution:** Need at least 2 images per class. Recommended: 20-50+ images per class.
 
 ### ⚠️ Slow Training Performance
+
 **Check if GPU is being used:**
+
+*Windows:*
 ```bash
 python check_gpu.py
 ```
+
+*Linux:*
+```bash
+python3 check_gpu.py
+# Also check GPU utilization in real-time
+nvidia-smi -l 1
+```
+
 **Optimize:**
 - Ensure CUDA version matches PyTorch
 - Enable mixed precision (already enabled in scripts)
 - Increase batch size if you have extra VRAM
+- On Linux: Check if GPU is not being used by another process with `nvidia-smi`
 
 ---
 
@@ -305,6 +509,7 @@ python check_gpu.py
 
 ## 📜 Quick Command Reference
 
+### 🪟 Windows Commands
 ```bash
 # Setup & Verification
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -325,6 +530,35 @@ python test_vit_tiny.py --interactive
 
 # Text Generation
 python model_setup.py
+```
+
+### 🐧 Linux Commands
+```bash
+# Setup & Verification
+python3 -m venv ai_env
+source ai_env/bin/activate
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install transformers sentencepiece pillow
+python3 check_gpu.py
+nvidia-smi  # Check GPU
+
+# Dataset Management
+python3 split_dataset.py --check
+python3 split_dataset.py --split
+
+# Training
+python3 train_vit_tiny.py
+
+# Testing
+python3 test_vit_tiny.py --image path/to/image.jpg
+python3 test_vit_tiny.py --directory path/to/folder
+python3 test_vit_tiny.py --interactive
+
+# Text Generation
+python3 model_setup.py
+
+# Monitor GPU during training
+nvidia-smi -l 1  # Updates every second
 ```
 
 ---
