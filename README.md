@@ -483,42 +483,110 @@ python3 test_vit_tiny.py --interactive
 
 ---
 
-## ⚡ VRAM Usage Estimates & Recommendations
+## ⚡ Chapter V.5 – VRAM Usage & Memory Optimization
 
-Short practical estimates for the models used in this project.
+### 💾 VRAM Requirements
 
-- Chat model — Microsoft Phi‑2 (~2.7B parameters)
-  - FP16 weights ≈ 5.4 GB
-  - Inference runtime (weights + kv‑cache + activations) ≈ 6.5–9+ GB
-  - Practical: fully on‑GPU requires ≈ 8 GB or more; grows with context length
+Understanding memory usage for both models in this unified system:
 
-- Vision model — ViT (fine‑tuned for 5 classes)
-  - FP16 weights ≈ 0.16–0.20 GB
-  - Inference overhead ≈ 0.2–0.6 GB
-  - Practical: ≈ 0.5–0.9 GB
+#### 🗣️ Chat Model (Microsoft Phi-2, ~2.7B parameters)
+- **FP16 Weights:** ~5.4 GB
+- **Inference Runtime:** 6.5–9+ GB (includes weights + kv-cache + activations)
+- **Practical Requirement:** Fully on-GPU requires ≈ 8 GB or more
+- **Note:** VRAM usage grows with longer context/conversation length
 
-- Combined (both resident on GPU)
-  - Realistic total ≈ 7.5–10+ GB
-  - Conclusion: 6 GB GPUs (GTX 1660 Super) will likely NOT fit Phi‑2 comfortably if both are fully on GPU
+#### 👁️ Vision Model (ViT, fine-tuned for 5 hardware classes)
+- **FP16 Weights:** ~0.16–0.20 GB
+- **Inference Overhead:** ~0.2–0.6 GB
+- **Practical Requirement:** ~0.5–0.9 GB total
 
-Recommended options when GPU VRAM is limited:
-1. 8‑bit quantization (bitsandbytes): reduces chat model VRAM to ~2–3 GB.
-   - Install: `pip install bitsandbytes accelerate safetensors`
-   - Load with `load_in_8bit=True` and `device_map="auto"`.
-2. Device offloading / automatic device map: keep parts on CPU and only use GPU for hot layers.
-3. Run chat model on CPU and keep vision model on GPU (vision uses little VRAM).
-4. Use a smaller chat model or hosted inference (Hugging Face Inference API) if local resources are insufficient.
+#### 🔥 Combined System (Both Models)
+- **Realistic Total:** ~7.5–10+ GB VRAM
+- **Conclusion:** 6 GB GPUs (GTX 1660 Super) will likely **NOT** fit Phi-2 comfortably with both models fully on GPU
 
-Quick commands:
+---
+
+### 🛠️ Memory Optimization Solutions
+
+When GPU VRAM is limited, try these options:
+
+#### 1️⃣ 8-bit Quantization (Recommended)
+Reduces chat model VRAM to ~2–3 GB using bitsandbytes:
+
 ```bash
-# Install 8-bit tooling
+# Install 8-bit quantization tools
 pip install bitsandbytes accelerate safetensors
+```
 
-# Example: reinstall PyTorch with CUDA if needed (Windows)
+Load model with `load_in_8bit=True` and `device_map="auto"` in your code.
+
+#### 2️⃣ Device Offloading / Auto Device Map
+Keep heavy layers on CPU and only hot layers on GPU (slower but works):
+- Already enabled with `device_map="auto"` in [`model_setup.py`](model_setup.py )
+- Automatically manages memory across CPU/GPU
+
+#### 3️⃣ Split Models Across Devices
+Run chat model on CPU and keep vision model on GPU:
+- Vision model uses minimal VRAM (~0.5-0.9 GB)
+- Chat model runs on CPU (slower but functional)
+
+#### 4️⃣ Use Smaller Models or Cloud Inference
+Alternative options:
+- **Smaller models:** `tiiuae/falcon-rw-1b` (~2.5GB), `google/flan-t5-large` (~3GB)
+- **Cloud inference:** Hugging Face Inference API (no local GPU needed)
+
+---
+
+### 🚀 Quick Setup Commands
+
+**Install Memory Optimization Tools:**
+
+*Windows:*
+```bash
+pip install bitsandbytes accelerate safetensors
+```
+
+*Linux:*
+```bash
+pip install bitsandbytes accelerate safetensors
+```
+
+**Reinstall PyTorch with CUDA (if needed):**
+
+*Windows:*
+```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-Add these options to your workflow based on available VRAM.  
+*Linux:*
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+**Monitor GPU Usage in Real-time:**
+
+*Windows:*
+```bash
+nvidia-smi -l 1
+```
+
+*Linux:*
+```bash
+nvidia-smi -l 1
+```
+
+---
+
+### 📊 VRAM Usage Summary Table
+
+| Configuration | VRAM Used | Works on 6GB GPU? | Performance |
+|---------------|-----------|-------------------|-------------|
+| **Both models (FP16)** | 7.5-10+ GB | ❌ No | Fastest |
+| **Chat 8-bit + Vision FP16** | ~3-4 GB | ✅ Yes | Fast |
+| **Chat on CPU + Vision GPU** | ~1 GB | ✅ Yes | Moderate |
+| **Both on CPU** | ~0 GB | ✅ Yes | Slowest |
+
+**Recommendation for GTX 1660 Super (6GB):** Use 8-bit quantization for best balance of speed and memory! ⚡
 
 ---
 
