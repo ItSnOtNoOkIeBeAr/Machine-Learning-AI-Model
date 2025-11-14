@@ -1,0 +1,4 @@
+# Alternative: CPU-only PyTorch (smaller, no long path issues)
+torch
+transformers>=4.35.0
+sentencepiece>=0.1.99
