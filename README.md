@@ -264,8 +264,17 @@ AI Model/
 ### 📋 Phase 1: Prepare Your Dataset (Required for Hardware ID)
 
 #### Step 1: Collect Hardware Images
-Gather 20-50+ images for each hardware category:
+Gather images for each hardware category. The more you gather, the smarter the AI becomes!
 
+### 📈 Data Quantity & Performance Guide
+
+| Images/Class | Expected Accuracy | Model Confidence | Status |
+| :--- | :--- | :--- | :--- |
+| **20 - 50** | 50% - 70% | Low (20-40%) | ⚠️ Starting Point |
+| **100 - 200** | 80% - 90% | High (70-95%) | ✅ Recommended |
+| **500+** | 90% - 95% | Very High (85-98%) | 🔥 Professional |
+
+**Where to put images:**
 ```bash
 dataset/train/cpu/           ← Add CPU images here
 dataset/train/gpu/           ← Add GPU images here
