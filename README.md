@@ -10,6 +10,33 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 
 ## 🧙‍♂️ Chapter I – Summoning the Required Tomes  
 
+### 📥 Summoning the Project (Download & Pull)
+
+**⚠️ CRITICAL WARNING:** This repository holds a massive artifact (the 1GB Model). Thou **MUST** use the **Large File Storage (LFS)** spells, or thy model file shall be but a hollow shell (1KB).
+
+#### 1. Prepare the Transporter (Run this FIRST)
+**Windows/Linux:**
+```bash
+git lfs install
+```
+
+#### 2. Summon from the Cloud (New Setup)
+If thou art setting this up on a fresh machine:
+```bash
+git clone [https://github.com/ItSnOtNoOkIeBeAr/Machine-Learning-AI-Model.git](https://github.com/ItSnOtNoOkIeBeAr/Machine-Learning-AI-Model.git)
+cd Machine-Learning-AI-Model
+```
+
+#### 3. Update the Realm (Pulling on Existing PC)
+If the folder already exists but thou needest the latest model or code:
+```bash
+git pull origin main      # Updates the scrolls (code)
+git lfs pull              # Downloads the heavy artifacts (1GB Model)
+```
+*(Note: If `models/best_vit_model.pth` is only 1KB, thou hast forgotten `git lfs pull`! Run it now!)*
+
+---
+
 ### Prerequisites
 Before thy journey begins, ensure that Python 3.8+ dwells upon thy machine.
 
@@ -27,7 +54,7 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name
 #### Step 2: Install PyTorch with CUDA (for GPU acceleration)
 For NVIDIA GPUs (GTX 1660 Super, RTX 2070, etc.):
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 ```
 
 For CPU-only systems:
@@ -93,8 +120,8 @@ sudo reboot
 **Fedora:**
 ```bash
 # Enable RPM Fusion repositories
-sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf install [https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm](https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm) -E %fedora).noarch.rpm
+sudo dnf install [https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm](https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm) -E %fedora).noarch.rpm
 
 # Install NVIDIA drivers
 sudo dnf install akmod-nvidia
@@ -115,7 +142,7 @@ source ai_env/bin/activate
 #### Step 4: Install PyTorch with CUDA
 For NVIDIA GPUs:
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 ```
 
 For CPU-only:
@@ -148,7 +175,7 @@ nvidia-smi
 **Windows:**
 ```bash
 # Install PyTorch + CUDA
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 
 # Install other packages
 pip install transformers sentencepiece pillow
@@ -164,7 +191,7 @@ python3 -m venv ai_env
 source ai_env/bin/activate
 
 # Install PyTorch + CUDA
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 
 # Install other packages
 pip install transformers sentencepiece pillow
@@ -555,12 +582,12 @@ pip install bitsandbytes accelerate safetensors
 
 *Windows:*
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 ```
 
 *Linux:*
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 ```
 
 **Monitor GPU Usage in Real-time:**
@@ -604,7 +631,7 @@ Then **restart your computer**.
 **Windows Solution:**
 ```bash
 pip uninstall torch torchvision torchaudio
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 python check_gpu.py
 ```
 
@@ -619,7 +646,7 @@ sudo reboot
 
 # Then reinstall PyTorch with CUDA
 pip uninstall torch torchvision torchaudio
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 python3 check_gpu.py
 ```
 
@@ -715,7 +742,7 @@ nvidia-smi -l 1
 **🪟 Windows:**
 ```bash
 # 1. Setup (one-time)
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 pip install transformers sentencepiece pillow
 python check_gpu.py
 
@@ -734,7 +761,7 @@ python model_setup.py
 # 1. Setup (one-time)
 python3 -m venv ai_env
 source ai_env/bin/activate
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 pip install transformers sentencepiece pillow
 python3 check_gpu.py
 
@@ -791,7 +818,7 @@ This project demonstrates:
 **Too long? Here's the speedrun:**
 ```bash
 # Install
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
 pip install transformers sentencepiece pillow
 
 # Add images to dataset/train/cpu, gpu, ram, motherboard, psu
