@@ -23,7 +23,7 @@ CONFIG = {
     'model_name': 'google/vit-base-patch16-224-in21k',  # Pre-trained ViT model
     'num_classes': 5,  # cpu, gpu, ram, motherboard, psu
     'batch_size': 32,  # Increased for GPU (adjust if OOM)
-    'num_epochs': 10,
+    'num_epochs': 20,  # Increased from 10 for better convergence
     'learning_rate': 2e-5,
     'train_dir': 'dataset/train',
     'val_dir': 'dataset/val',
@@ -40,12 +40,18 @@ CLASS_NAMES = ['cpu', 'gpu', 'ram', 'motherboard', 'psu']
 def get_transforms():
     """Define data transformations for training and validation."""
     train_transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(15),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+        transforms.Resize((256, 256)),
+        transforms.RandomResizedCrop(224, scale=(0.85, 1.0)),  # Less aggressive crop
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomRotation(15),  # Moderate rotation
+        transforms.ColorJitter(
+            brightness=0.2,  # Balanced color variations
+            contrast=0.2,
+            saturation=0.2,
+            hue=0.05
+        ),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
     
     val_transform = transforms.Compose([

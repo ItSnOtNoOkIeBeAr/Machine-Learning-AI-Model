@@ -6,10 +6,14 @@ Unified AI System - Chat + Hardware Classification
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, ViTImageProcessor, ViTForImageClassification
 import torch
+import torch.nn.functional as F
 from PIL import Image
 import os
 
-HARDWARE_CLASSES = ['cpu', 'gpu', 'motherboard', 'psu', 'ram']
+HARDWARE_CLASSES = ['cpu', 'gpu', 'motherboard', 'psu', 'ram']  # Match trained model (5 classes)
+
+# Confidence threshold
+CONFIDENCE_THRESHOLD = 0.25  # 25% minimum to accept as hardware
 
 def setup_chat_model(model_name="microsoft/phi-2"):
     """Load PRE-TRAINED chat model (no training needed)."""
@@ -65,7 +69,7 @@ def setup_vision_model(model_path="models/best_vit_model.pth"):
 
 
 def classify_hardware(image_path, model, processor, device):
-    """Classify hardware from image."""
+    """Classify hardware from image with single confidence threshold."""
     try:
         image = Image.open(image_path).convert('RGB')
         inputs = processor(images=image, return_tensors="pt")
@@ -74,30 +78,30 @@ def classify_hardware(image_path, model, processor, device):
         with torch.no_grad():
             outputs = model(**inputs)
             logits = outputs.logits
-            probabilities = torch.nn.functional.softmax(logits, dim=-1)
+            probabilities = F.softmax(logits, dim=-1)
             predicted_class_idx = logits.argmax(-1).item()
-            confidence = probabilities[0][predicted_class_idx].item() * 100
+            confidence = probabilities[0][predicted_class_idx].item()
         
         predicted_class = HARDWARE_CLASSES[predicted_class_idx]
+        is_valid = confidence >= CONFIDENCE_THRESHOLD
+        all_probs = probabilities[0].cpu().numpy()
         
-        # Top 3 predictions
-        top3_prob, top3_idx = torch.topk(probabilities[0], k=min(3, len(HARDWARE_CLASSES)))
-        top3_predictions = []
-        for prob, idx in zip(top3_prob, top3_idx):
-            top3_predictions.append({
-                'class': HARDWARE_CLASSES[idx.item()],
-                'confidence': prob.item() * 100
-            })
-        
-        return {
-            'predicted_class': predicted_class,
-            'confidence': confidence,
-            'top3': top3_predictions,
-            'success': True
-        }
+        return predicted_class, confidence, is_valid, all_probs
     
     except Exception as e:
-        return {'success': False, 'error': str(e)}
+        return None, 0.0, False, None
+
+
+def get_hardware_explanation(component):
+    """Get a brief explanation of the hardware component."""
+    explanations = {
+        'cpu': "A CPU (Central Processing Unit) is the primary processor that executes\n   instructions and performs calculations. It acts as the brain of the\n   computer system.",
+        'gpu': "A GPU (Graphics Processing Unit) is specialized for rendering graphics\n   and parallel processing. Essential for gaming, video editing, and AI tasks.",
+        'ram': "RAM (Random Access Memory) provides temporary storage for active data\n   and programs. More RAM allows better multitasking and faster performance.",
+        'motherboard': "A motherboard is the main circuit board connecting all components.\n   It houses the CPU, RAM, and provides connectivity for all other parts.",
+        'psu': "A PSU (Power Supply Unit) converts AC power to DC power and distributes\n   it to all components. Critical for system stability and performance."
+    }
+    return explanations.get(component.lower(), "Hardware component detected.")
 
 
 def chat_response(model, tokenizer, user_message, conversation_history="", max_length=200):
@@ -114,14 +118,22 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
     Returns:
         Generated response text
     """
+    # Handle common greetings with pre-defined responses
+    greetings = ["hello", "hi", "hey", "greetings", "howdy"]
+    if user_message.lower().strip() in greetings:
+        return "Hello! 👋 I'm your hardware identification assistant. I can help identify computer components or answer questions about PC hardware. Try 'identify <image_path>' to classify a hardware image!"
+    
+    # Add system prompt for better responses
+    system_prompt = """You are a helpful assistant specializing in computer hardware. Answer questions clearly and concisely."""
+    
     # Format the prompt with conversation history
     if conversation_history:
-        prompt = f"{conversation_history}\nUser: {user_message}\nAssistant:"
+        prompt = f"{system_prompt}\n\n{conversation_history}\nUser: {user_message}\nAssistant:"
     else:
-        prompt = f"User: {user_message}\nAssistant:"
+        prompt = f"{system_prompt}\n\nUser: {user_message}\nAssistant:"
     
     # Tokenize input
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512, padding=True)
     
     # Move inputs to same device as model
     inputs = {k: v.to(model.device) for k, v in inputs.items()}
@@ -137,7 +149,6 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
             do_sample=True,
             pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
-            repetition_penalty=1.2
         )
     
     # Decode the response
@@ -147,7 +158,7 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
     if "Assistant:" in full_response:
         response = full_response.split("Assistant:")[-1].strip()
     else:
-        response = full_response[len(prompt):].strip()
+        response = full_response.replace(prompt, "").strip()
     
     # Clean up response (remove any additional "User:" if generated)
     if "User:" in response:
@@ -164,7 +175,8 @@ def unified_system():
     print("\n📚 How This Works:")
     print("  1️⃣ Chat Model (Phi-2): Already trained, ready to chat")
     print("  2️⃣ Vision Model: YOU trained this with hardware images")
-    print("\nCommands:")
+    print(f"  3️⃣ Confidence Threshold: {CONFIDENCE_THRESHOLD*100:.0f}% minimum for valid detection")
+    print("\n💡 Commands:")
     print("  💬 Chat: Type your message")
     print("  🖼️ Identify: identify <image_path>")
     print("  ⚙️ Other: 'quit', 'clear', 'help', 'status'")
@@ -206,8 +218,9 @@ def unified_system():
         if user_input.lower() == 'status':
             print(f"\n📊 System Status:")
             print(f"   Chat Model: ✅ Ready (Pre-trained Phi-2)")
-            print(f"   Vision Model: {'✅ Trained' if vision_trained else '⚠️ Not trained yet'}")
+            print(f"   Vision Model: {'✅ Trained (77.36%)' if vision_trained else '⚠️ Not trained yet'}")
             print(f"   GPU: {gpu_name}")
+            print(f"   Confidence Threshold: {CONFIDENCE_THRESHOLD*100:.0f}%")
             print()
             continue
         
@@ -236,33 +249,50 @@ def unified_system():
             image_path = user_input[9:].strip().strip('"').strip("'")
             
             if not os.path.exists(image_path):
-                print(f"\n❌ Image not found: {image_path}\n")
+                print(f"\n❌ Error: Image not found at '{image_path}'\n")
                 continue
             
             print(f"\n🔍 Analyzing: {image_path}")
             print("⏳ Processing...\n")
             
-            result = classify_hardware(image_path, vision_model, vision_processor, vision_device)
+            predicted, confidence, is_valid, all_probs = classify_hardware(
+                image_path, vision_model, vision_processor, vision_device
+            )
             
-            if result['success']:
-                predicted = result['predicted_class'].upper()
-                confidence = result['confidence']
+            if predicted is None:
+                print("❌ Error processing image\n")
+                continue
+            
+            if is_valid:
+                # Valid hardware detection (≥20% confidence)
+                print(f"🎯 Prediction: {predicted.upper()}")
+                print(f"📊 Confidence: {confidence*100:.2f}%\n")
                 
-                print(f"🎯 Prediction: {predicted}")
-                print(f"📊 Confidence: {confidence:.2f}%\n")
+                # Top 3 predictions
+                top_3_indices = all_probs.argsort()[-3:][::-1]
                 print("📈 Top 3 Predictions:")
-                for i, pred in enumerate(result['top3'], 1):
-                    print(f"   {i}. {pred['class'].upper()}: {pred['confidence']:.2f}%")
+                for i, idx in enumerate(top_3_indices, 1):
+                    print(f"   {i}. {HARDWARE_CLASSES[idx].upper()}: {all_probs[idx]*100:.2f}%")
                 
-                # AI explanation
+                # AI Explanation
                 print(f"\n🤖 AI Explanation:")
-                explanation_prompt = f"Briefly explain what a {predicted} is and its main function in a computer system in 2-3 sentences."
-                explanation = chat_response(chat_model, chat_tokenizer, explanation_prompt, max_length=150)
-                print(f"   {explanation}")
+                print(f"   {get_hardware_explanation(predicted)}")
+                print()
             else:
-                print(f"❌ Error: {result['error']}")
+                # Invalid - not hardware (< 20% confidence)
+                print(f"🔴 NOT A HARDWARE COMPONENT")
+                print(f"   Best guess: {predicted.upper()} ({confidence*100:.2f}%)")
+                print(f"   ❌ Confidence too low (< {CONFIDENCE_THRESHOLD*100:.0f}%)\n")
+                print("   This doesn't appear to be computer hardware!\n")
+                
+                # Show all predictions
+                print("📊 All Predictions:")
+                for i, class_name in enumerate(HARDWARE_CLASSES):
+                    bar_length = int(all_probs[i] * 40)
+                    bar = "█" * bar_length + "░" * (40 - bar_length)
+                    print(f"   {class_name:12s} {bar} {all_probs[i]*100:5.2f}%")
+                print()
             
-            print()
             continue
         
         # Regular chat

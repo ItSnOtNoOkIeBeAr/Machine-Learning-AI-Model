@@ -15,13 +15,24 @@ VAL_SPLIT = 0.2  # 20% for validation, 80% for training
 
 CLASSES = ['cpu', 'gpu', 'ram', 'motherboard', 'psu']
 
+def ensure_directories():
+    """Create all necessary directories if they don't exist."""
+    for class_name in CLASSES:
+        train_class_dir = Path(TRAIN_DIR) / class_name
+        val_class_dir = Path(VAL_DIR) / class_name
+        train_class_dir.mkdir(parents=True, exist_ok=True)
+        val_class_dir.mkdir(parents=True, exist_ok=True)
+
 def split_dataset():
     """Split training images into train and validation sets."""
-    print("=" * 70)
+    print("\n" + "=" * 70)
     print("Dataset Splitter - Auto Split Train/Val")
     print("=" * 70)
     print(f"Validation split: {VAL_SPLIT*100:.0f}%")
     print("=" * 70)
+    
+    # Ensure directories exist
+    ensure_directories()
     
     total_moved = 0
     
@@ -89,6 +100,9 @@ def check_dataset():
     print("Current Dataset Statistics:")
     print("=" * 70)
     
+    # Ensure directories exist first
+    ensure_directories()
+    
     train_total = 0
     val_total = 0
     
@@ -101,12 +115,12 @@ def check_dataset():
         train_images = len([
             f for f in train_path.iterdir() 
             if f.is_file() and f.suffix.lower() in image_extensions
-        ])
+        ]) if train_path.exists() else 0
         
         val_images = len([
             f for f in val_path.iterdir() 
             if f.is_file() and f.suffix.lower() in image_extensions
-        ])
+        ]) if val_path.exists() else 0
         
         total = train_images + val_images
         train_total += train_images
@@ -127,7 +141,7 @@ def check_dataset():
     # Check if ready to train
     if val_total == 0:
         print("\n⚠️  No validation images! Cannot train yet.")
-        print("   Run this script to auto-split, or add images to val/ folders manually.")
+        print("   Run: python split_dataset.py --split")
     elif train_total < 5 * len(CLASSES):
         print("\n⚠️  Warning: Very few training images!")
         print("   Recommended: At least 20-50 images per class for good results.")
