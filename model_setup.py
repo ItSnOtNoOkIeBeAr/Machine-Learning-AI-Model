@@ -118,13 +118,34 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
     Returns:
         Generated response text
     """
-    # Handle common greetings with pre-defined responses
-    greetings = ["hello", "hi", "hey", "greetings", "howdy"]
-    if user_message.lower().strip() in greetings:
-        return "Hello! 👋 I'm your hardware identification assistant. I can help identify computer components or answer questions about PC hardware. Try 'identify <image_path>' to classify a hardware image!"
+    # Pre-defined responses for common questions
+    predefined_responses = {
+        "who made you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
+        "who created you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
+        "who built you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
+        "what are you": "I'm an AI assistant built with Microsoft's Phi-2 language model and Vision Transformer. I can chat with you and identify computer hardware components from images!",
+        "what can you do": "I can do two main things: 1) Chat with you about computer hardware and technology, and 2) Identify hardware components from images. Just type 'identify <image_path>' to classify a component!",
+        "what is your purpose": "I'm designed to help identify computer hardware components and answer questions about PC hardware. I combine conversational AI with computer vision!",
+        "how do you work": "I use two AI models: Microsoft Phi-2 for conversational responses and Vision Transformer for image classification. Together, they let me chat and identify hardware!",
+        "what model are you": "I'm powered by Microsoft's Phi-2 language model (2.7B parameters) for chat and Google's Vision Transformer (ViT) for hardware image classification.",
+        "hello": "Hello! 👋 I'm your hardware identification assistant. I can help identify computer components or answer questions about PC hardware. Try 'identify <image_path>' to classify a hardware image!",
+        "hi": "Hi there! 👋 I'm your AI hardware assistant. I can chat about PC components and identify hardware from images. What would you like to know?",
+        "hey": "Hey! 👋 I'm here to help with computer hardware questions and component identification. What can I do for you?",
+        "help": "I can help you in two ways:\n1. Chat about computer hardware and technology\n2. Identify hardware components - type 'identify <path>' with an image path\n\nSupported components: CPU, GPU, RAM, Motherboard, PSU",
+        "what hardware can you identify": "I can identify these computer components: CPU (processors), GPU (graphics cards), RAM (memory modules), Motherboards, and PSU (power supplies). Just use 'identify <image_path>'!",
+        "how accurate are you": "My accuracy depends on image quality and training data. For best results, use clear, well-lit photos with the component as the main focus.",
+        "thank you": "You're welcome! Feel free to ask more questions or identify more hardware components!",
+        "thanks": "You're welcome! Let me know if you need anything else!"
+    }
+    
+    # Check for pre-defined responses
+    user_lower = user_message.lower().strip()
+    for question, answer in predefined_responses.items():
+        if question in user_lower:
+            return answer
     
     # Add system prompt for better responses
-    system_prompt = """You are a helpful assistant specializing in computer hardware. Answer questions clearly and concisely."""
+    system_prompt = """You are a helpful assistant specializing in computer hardware. Answer questions clearly and concisely in 2-4 sentences. Focus on practical, accurate information."""
     
     # Format the prompt with conversation history
     if conversation_history:
@@ -138,15 +159,17 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
     # Move inputs to same device as model
     inputs = {k: v.to(model.device) for k, v in inputs.items()}
     
-    # Generate response
+    # Generate response with improved parameters
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=max_length,
+            max_new_tokens=150,  # Reduced for more focused responses
             num_return_sequences=1,
             temperature=0.7,
             top_p=0.9,
+            top_k=50,  # Added to reduce randomness
             do_sample=True,
+            repetition_penalty=1.3,  # Prevent repetitive text
             pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
@@ -163,6 +186,11 @@ def chat_response(model, tokenizer, user_message, conversation_history="", max_l
     # Clean up response (remove any additional "User:" if generated)
     if "User:" in response:
         response = response.split("User:")[0].strip()
+    
+    # Limit response length (keep max 4 sentences)
+    sentences = response.split('.')
+    if len(sentences) > 4:
+        response = '.'.join(sentences[:4]) + '.'
     
     return response
 
