@@ -37,6 +37,63 @@ git lfs pull              # Downloads the heavy artifacts (1GB Model)
 
 ---
 
+### 📤 Pushing Large Models to GitHub (Git LFS Guide)
+
+**⚠️ CRITICAL:** If thy trained model exceeds 100MB, thou **MUST** use Git LFS or GitHub shall reject thy push! Follow these sacred steps:
+
+#### **Step 1: Wake Up the LFS System** ⚡
+```powershell
+git lfs install
+```
+
+#### **Step 2: Force Git to Drop the Big File (The Safety Switch)** 🔒
+This removes it from the "normal" upload queue just in case it was already there:
+```powershell
+git reset HEAD models/best_vit_model.pth
+```
+
+#### **Step 3: Tell Git to Watch for Model Files** 👁️
+```powershell
+git lfs track "*.pth"
+```
+
+#### **Step 4: Lock in the LFS Rules (Do This FIRST)** 📜
+```powershell
+git add .gitattributes
+```
+
+#### **Step 5: Now Add the Big File Again** 🎯
+Since we set the rules in Step 3 & 4, Git will now correctly grab this using LFS:
+```powershell
+git add models/best_vit_model.pth
+```
+
+#### **Step 6: Add the Rest of Your Code** 📚
+```powershell
+git add .
+```
+
+#### **Step 7: Verify It Worked (Optional but Smart)** ✅
+If you see the file listed here, you are 100% safe:
+```powershell
+git lfs ls-files
+```
+
+#### **Step 8: Seal the Decree (Commit)** 🔐
+```powershell
+git commit -m "Upload 1GB model via LFS"
+```
+
+#### **Step 9: Send It to the Realm (Push)** 🚀
+Watch the progress bar carefully!
+```powershell
+git push origin main
+```
+
+**🎉 Victory!** Thy massive model file now dwells safely in the GitHub realm, tracked by LFS magic!
+
+---
+
 ### Prerequisites
 Before thy journey begins, ensure that Python 3.8+ dwells upon thy machine.
 
