@@ -10,9 +10,11 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 
 ## 🧙‍♂️ Chapter I – Summoning the Required Tomes  
 
-### 📥 Summoning the Project (Download & Pull)
+### 📥 Summoning the Project (Download & Pull) - FOR NEW USERS
 
 **⚠️ CRITICAL WARNING:** This repository holds a massive artifact (the 1GB Model). Thou **MUST** use the **Large File Storage (LFS)** spells, or thy model file shall be but a hollow shell (1KB).
+
+**🎯 FOLLOW THESE STEPS IF YOU'RE DOWNLOADING/CLONING FOR THE FIRST TIME:**
 
 #### 1. Prepare the Transporter (Run this FIRST)
 **Windows/Linux:**
@@ -23,11 +25,28 @@ git lfs install
 #### 2. Summon from the Cloud (New Setup)
 If thou art setting this up on a fresh machine:
 ```bash
-git clone [https://github.com/ItSnOtNoOkIeBeAr/Machine-Learning-AI-Model.git](https://github.com/ItSnOtNoOkIeBeAr/Machine-Learning-AI-Model.git)
+git clone https://github.com/ItSnOtNoOkIeBeAr/Machine-Learning-AI-Model.git
 cd Machine-Learning-AI-Model
 ```
 
-#### 3. Update the Realm (Pulling on Existing PC)
+#### 3. Verify the Sacred Artifact
+Check if the model file downloaded correctly (should be ~1GB, not 1KB):
+```bash
+# Windows (PowerShell)
+Get-Item models\best_vit_model.pth | Select-Object Name, Length
+
+# Linux
+ls -lh models/best_vit_model.pth
+```
+
+**That's it!** Thou art ready to use the system. Jump to the **Prerequisites** section below! ✅
+
+---
+
+### 🔄 Update the Realm (Pulling) - FOR EXISTING USERS
+
+**🎯 FOLLOW THESE STEPS IF YOU ALREADY HAVE THE PROJECT AND WANT TO UPDATE:**
+
 If the folder already exists but thou needest the latest model or code:
 ```bash
 git pull origin main      # Updates the scrolls (code)
@@ -37,9 +56,13 @@ git lfs pull              # Downloads the heavy artifacts (1GB Model)
 
 ---
 
-### 📤 Pushing Large Models to GitHub (Git LFS Guide)
+### 📤 Pushing Large Models to GitHub (Git LFS Guide) - FOR CONTRIBUTORS/DEVELOPERS
 
-**⚠️ CRITICAL:** If thy trained model exceeds 100MB, thou **MUST** use Git LFS or GitHub shall reject thy push! Follow these sacred steps:
+**⚠️ CRITICAL:** This section is **ONLY** for contributors who are uploading changes back to GitHub! If thou art just downloading/using the project, **SKIP THIS SECTION!**
+
+**🎯 FOLLOW THESE STEPS ONLY IF YOU'RE PUSHING YOUR TRAINED MODEL TO GITHUB:**
+
+If thy trained model exceeds 100MB, thou **MUST** use Git LFS or GitHub shall reject thy push! Follow these sacred steps:
 
 #### **Step 1: Wake Up the LFS System** ⚡
 ```powershell
