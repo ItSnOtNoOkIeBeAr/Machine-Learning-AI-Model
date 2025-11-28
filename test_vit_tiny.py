@@ -75,7 +75,7 @@ def predict_image(model, image_path, classes, transform):
     # Predict with mixed precision for faster inference on GPU
     with torch.no_grad():
         if CONFIG['device'] == 'cuda':
-            with torch.cuda.amp.autocast():
+            with torch.amp.autocast('cuda'):
                 outputs = model(image_tensor).logits
         else:
             outputs = model(image_tensor).logits
@@ -92,7 +92,7 @@ def predict_image(model, image_path, classes, transform):
         'predicted_class': predicted_class,
         'confidence': confidence_score,
         'top_predictions': [
-            (classes[idx], prob.item() * 100)
+            (classes[idx], float(prob) * 100)
             for idx, prob in zip(top_indices[0].tolist(), top_probs[0].tolist())
         ]
     }
