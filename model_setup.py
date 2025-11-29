@@ -2,6 +2,7 @@
 Unified AI System - Auto Chat (Gemini + Phi-2 Fallback) + Hardware Classification
 - Chat: Gemini (primary) with Phi-2 fallback
 - Vision Model: Hardware component identification
+- Confidence Threshold: 25% minimum to accept as hardware
 """
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, ViTImageProcessor, ViTForImageClassification
