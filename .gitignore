@@ -1,0 +1,29 @@
+# Model files (use Git LFS)
+*.pth
+models/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+ai_env/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# NOTE: config.py is NOT ignored during development
+# Remember to add it back to .gitignore before public release!

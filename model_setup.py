@@ -1,7 +1,7 @@
 """
-Unified AI System - Chat + Hardware Classification
-- Chat Model: Pre-trained (ready to use)
-- Vision Model: Train with your hardware images
+Unified AI System - Auto Chat (Gemini + Phi-2 Fallback) + Hardware Classification
+- Chat: Gemini (primary) with Phi-2 fallback
+- Vision Model: Hardware component identification
 """
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, ViTImageProcessor, ViTForImageClassification
@@ -10,32 +10,54 @@ import torch.nn.functional as F
 from PIL import Image
 import os
 
+# Import Gemini
+try:
+    import google.generativeai as genai
+    from config import GEMINI_API_KEY
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("⚠️ Gemini not available. Install: pip install google-generativeai")
+except Exception as e:
+    GEMINI_AVAILABLE = False
+    print(f"⚠️ Gemini config error: {e}")
+
 HARDWARE_CLASSES = ['cpu', 'gpu', 'motherboard', 'psu', 'ram']  # Match trained model (5 classes)
 
 # Confidence threshold
 CONFIDENCE_THRESHOLD = 0.25  # 25% minimum to accept as hardware
 
+def setup_gemini():
+    """Setup Google Gemini AI for better conversational responses."""
+    if not GEMINI_AVAILABLE:
+        return None
+    
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        print("✅ Gemini AI ready! (Model: gemini-2.5-flash)")
+        print("   Stable version supporting up to 1M tokens")
+        return model
+    except Exception as e:
+        print(f"⚠️ Gemini setup failed: {e}")
+        return None
+
 def setup_chat_model(model_name="microsoft/phi-2"):
-    """Load PRE-TRAINED chat model (no training needed)."""
-    print(f"Loading chat model: {model_name}")
-    print("This model is already trained and ready to use!")
+    """Load Phi-2 as fallback chat model."""
+    print(f"Loading fallback chat model: {model_name}")
     
-    # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    
-    # Set pad token if not already set
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    # Load model
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         trust_remote_code=True,
         torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-        device_map="auto"  # Automatically use GPU if available
+        device_map="auto"
     )
     
-    print(f"✅ Chat model ready!")
+    print(f"✅ Phi-2 fallback ready!")
     return model, tokenizer
 
 
@@ -104,110 +126,102 @@ def get_hardware_explanation(component):
     return explanations.get(component.lower(), "Hardware component detected.")
 
 
-def chat_response(model, tokenizer, user_message, conversation_history="", max_length=200):
+def unified_chat_response(gemini_model, phi2_model, phi2_tokenizer, user_message, conversation_history=""):
     """
-    Generate a chat response from the model.
-    
-    Args:
-        model: The loaded language model
-        tokenizer: The tokenizer for the model
-        user_message: The user's current message
-        conversation_history: Previous conversation context
-        max_length: Maximum length of generated response
+    Unified chat response using Gemini (primary) with Phi-2 fallback.
+    Automatically tries Gemini first, falls back to Phi-2 if needed.
     
     Returns:
-        Generated response text
+        tuple: (response_text, source) where source is 'predefined', 'gemini', or 'phi2'
     """
-    # Pre-defined responses for common questions
+    # Pre-defined responses (instant, no API needed)
     predefined_responses = {
         "who made you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
-        "who created you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
-        "who built you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
-        "what are you": "I'm an AI assistant built with Microsoft's Phi-2 language model and Vision Transformer. I can chat with you and identify computer hardware components from images!",
-        "what can you do": "I can do two main things: 1) Chat with you about computer hardware and technology, and 2) Identify hardware components from images. Just type 'identify <image_path>' to classify a component!",
-        "what is your purpose": "I'm designed to help identify computer hardware components and answer questions about PC hardware. I combine conversational AI with computer vision!",
-        "how do you work": "I use two AI models: Microsoft Phi-2 for conversational responses and Vision Transformer for image classification. Together, they let me chat and identify hardware!",
-        "what model are you": "I'm powered by Microsoft's Phi-2 language model (2.7B parameters) for chat and Google's Vision Transformer (ViT) for hardware image classification.",
-        "hello": "Hello! 👋 I'm your hardware identification assistant. I can help identify computer components or answer questions about PC hardware. Try 'identify <image_path>' to classify a hardware image!",
-        "hi": "Hi there! 👋 I'm your AI hardware assistant. I can chat about PC components and identify hardware from images. What would you like to know?",
-        "hey": "Hey! 👋 I'm here to help with computer hardware questions and component identification. What can I do for you?",
-        "help": "I can help you in two ways:\n1. Chat about computer hardware and technology\n2. Identify hardware components - type 'identify <path>' with an image path\n\nSupported components: CPU, GPU, RAM, Motherboard, PSU",
-        "what hardware can you identify": "I can identify these computer components: CPU (processors), GPU (graphics cards), RAM (memory modules), Motherboards, and PSU (power supplies). Just use 'identify <image_path>'!",
-        "how accurate are you": "My accuracy depends on image quality and training data. For best results, use clear, well-lit photos with the component as the main focus.",
-        "thank you": "You're welcome! Feel free to ask more questions or identify more hardware components!",
-        "thanks": "You're welcome! Let me know if you need anything else!"
+        "who created you": "I was created by a student at LSPU as part of a CSST 101 final project!",
+        "what are you": "I'm an AI assistant powered by Gemini and Phi-2, with Vision Transformer for hardware identification!",
+        "what can you do": "I can chat naturally about any topic and identify computer hardware from images. Type 'identify <image_path>' to classify components!",
+        "hello": "Hello! 👋 I'm your AI assistant. Ask me anything or use 'identify <image_path>' to classify hardware!",
+        "hi": "Hi there! 👋 I can chat about any topic and identify computer hardware. What can I help you with?",
+        "help": "💬 Chat: Type your message\n🖼️ Identify: identify <path>\n⚙️ Commands: 'status', 'clear', 'quit'",
     }
     
     # Check for pre-defined responses
     user_lower = user_message.lower().strip()
     for question, answer in predefined_responses.items():
         if question in user_lower:
-            return answer
+            return answer, "predefined"
     
-    # Add system prompt for better responses
-    system_prompt = """You are a helpful assistant specializing in computer hardware. Answer questions clearly and concisely in 2-4 sentences. Focus on practical, accurate information."""
+    # Try Gemini first (if available)
+    if gemini_model is not None:
+        try:
+            system_context = """You are a helpful AI assistant specializing in computer hardware and technology. 
+Answer questions clearly and concisely in 2-4 sentences."""
+            
+            if conversation_history:
+                full_prompt = f"{system_context}\n\n{conversation_history}\nUser: {user_message}"
+            else:
+                full_prompt = f"{system_context}\n\nUser: {user_message}"
+            
+            response = gemini_model.generate_content(full_prompt)
+            return response.text.strip(), "gemini"
+        
+        except Exception as e:
+            print(f"   [Gemini error, using Phi-2 fallback...]")
     
-    # Format the prompt with conversation history
+    # Fallback to Phi-2
+    system_prompt = """You are a helpful assistant specializing in computer hardware. Answer questions clearly and concisely in 2-4 sentences."""
+    
     if conversation_history:
         prompt = f"{system_prompt}\n\n{conversation_history}\nUser: {user_message}\nAssistant:"
     else:
         prompt = f"{system_prompt}\n\nUser: {user_message}\nAssistant:"
     
-    # Tokenize input
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512, padding=True)
+    inputs = phi2_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512, padding=True)
+    inputs = {k: v.to(phi2_model.device) for k, v in inputs.items()}
     
-    # Move inputs to same device as model
-    inputs = {k: v.to(model.device) for k, v in inputs.items()}
-    
-    # Generate response with improved parameters
     with torch.no_grad():
-        outputs = model.generate(
+        outputs = phi2_model.generate(
             **inputs,
-            max_new_tokens=150,  # Reduced for more focused responses
-            num_return_sequences=1,
+            max_new_tokens=150,
             temperature=0.7,
             top_p=0.9,
-            top_k=50,  # Added to reduce randomness
+            top_k=50,
             do_sample=True,
-            repetition_penalty=1.3,  # Prevent repetitive text
-            pad_token_id=tokenizer.pad_token_id,
-            eos_token_id=tokenizer.eos_token_id,
+            repetition_penalty=1.3,
+            pad_token_id=phi2_tokenizer.pad_token_id,
+            eos_token_id=phi2_tokenizer.eos_token_id,
         )
     
-    # Decode the response
-    full_response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    full_response = phi2_tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    # Extract only the assistant's response
     if "Assistant:" in full_response:
         response = full_response.split("Assistant:")[-1].strip()
     else:
         response = full_response.replace(prompt, "").strip()
     
-    # Clean up response (remove any additional "User:" if generated)
     if "User:" in response:
         response = response.split("User:")[0].strip()
     
-    # Limit response length (keep max 4 sentences)
     sentences = response.split('.')
     if len(sentences) > 4:
         response = '.'.join(sentences[:4]) + '.'
     
-    return response
+    return response, "phi2"
 
 
 def unified_system():
-    """Unified system with chat and hardware identification."""
+    """Unified system with automatic chat (Gemini + Phi-2) and hardware identification."""
     print("\n" + "="*80)
-    print("🤖 UNIFIED AI SYSTEM - Chat + Hardware Identification")
+    print("🤖 UNIFIED AI SYSTEM - Auto Chat + Hardware Identification")
     print("="*80)
-    print("\n📚 How This Works:")
-    print("  1️⃣ Chat Model (Phi-2): Already trained, ready to chat")
-    print("  2️⃣ Vision Model: YOU trained this with hardware images")
-    print(f"  3️⃣ Confidence Threshold: {CONFIDENCE_THRESHOLD*100:.0f}% minimum for valid detection")
+    print("\n📚 System Features:")
+    print("  💬 Chat: Gemini (primary) with Phi-2 fallback")
+    print("  🖼️ Vision: Hardware component identification")
+    print(f"  🎯 Confidence Threshold: {CONFIDENCE_THRESHOLD*100:.0f}% minimum")
     print("\n💡 Commands:")
     print("  💬 Chat: Type your message")
     print("  🖼️ Identify: identify <image_path>")
-    print("  ⚙️ Other: 'quit', 'clear', 'help', 'status'")
+    print("  ⚙️ Other: 'status', 'clear', 'help', 'quit'")
     print("="*80 + "\n")
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -215,13 +229,22 @@ def unified_system():
     print(f"🖥️ Using device: {device} ({gpu_name})\n")
     
     print("Loading AI models...")
-    chat_model, chat_tokenizer = setup_chat_model()
+    
+    # Load both models
+    gemini_model = setup_gemini()
+    phi2_model, phi2_tokenizer = setup_chat_model()
     vision_model, vision_processor, vision_device = setup_vision_model()
     
+    gemini_available = gemini_model is not None
     conversation_history = ""
     vision_trained = os.path.exists("models/best_vit_model.pth")
     
     print("\n✅ System ready!\n")
+    
+    if gemini_available:
+        print("💬 Chat: Using Gemini with Phi-2 fallback\n")
+    else:
+        print("💬 Chat: Using Phi-2 only (Gemini unavailable)\n")
     
     if not vision_trained:
         print("⚠️ NOTICE: Vision model not trained yet!")
@@ -245,8 +268,9 @@ def unified_system():
         
         if user_input.lower() == 'status':
             print(f"\n📊 System Status:")
-            print(f"   Chat Model: ✅ Ready (Pre-trained Phi-2)")
-            print(f"   Vision Model: {'✅ Trained (77.36%)' if vision_trained else '⚠️ Not trained yet'}")
+            print(f"   Gemini API: {'✅ Connected (Primary)' if gemini_available else '❌ Not available'}")
+            print(f"   Phi-2 Model: ✅ Loaded (Fallback)")
+            print(f"   Vision Model: {'✅ Trained (63.49%)' if vision_trained else '⚠️ Not trained yet'}")
             print(f"   GPU: {gpu_name}")
             print(f"   Confidence Threshold: {CONFIDENCE_THRESHOLD*100:.0f}%")
             print()
@@ -327,7 +351,11 @@ def unified_system():
         print("\n🤖 Assistant: ", end="", flush=True)
         
         try:
-            response = chat_response(chat_model, chat_tokenizer, user_input, conversation_history)
+            response, source = unified_chat_response(
+                gemini_model, phi2_model, phi2_tokenizer, 
+                user_input, conversation_history
+            )
+            
             print(response)
             
             conversation_history += f"\nUser: {user_input}\nAssistant: {response}"

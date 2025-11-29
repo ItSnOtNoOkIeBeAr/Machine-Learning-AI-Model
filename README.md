@@ -144,7 +144,7 @@ pip install torch torchvision torchaudio
 
 #### Step 3: Install Additional Dependencies
 ```bash
-pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn
+pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn google-generativeai
 ```
 
 #### Step 4: Verify GPU Setup
@@ -232,7 +232,7 @@ pip install torch torchvision torchaudio
 
 #### Step 5: Install Additional Dependencies
 ```bash
-pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn
+pip install transformers sentencepiece accelerate pillow matplotlib scikit-learn google-generativeai
 ```
 
 #### Step 6: Verify GPU Setup
@@ -287,22 +287,36 @@ nvidia-smi
 
 ## 🛡️ Chapter II – The Unified AI System
 
-This project combines **two powerful AI models** into one unified system:
+This sacred project wields **THREE mighty powers** united in one glorious system:
 
-### 🎭 Power I: Chat AI (Microsoft Phi-2)
-- Pre-trained language model (2.7B parameters)
-- Answer questions about hardware, technology, and general topics
-- Explain technical concepts
-- Have natural conversations
+### 🌟 Power I: Gemini AI (Google)
+- **Cloud-based conversational oracle** with superior natural language understanding
+- Powered by Google's latest Gemini 1.5 Flash model
+- Excellent for general questions, explanations, and natural conversations
+- **Free Tier:** 1,500 requests per day (more than enough for thy noble quest!)
+- No local VRAM required (runs in the cloud realm)
 
-### 🖼️ Power II: Hardware Classifier (Vision Transformer)
-- YOU train this model with your hardware images
-- Identifies 5 types of computer components:
+### 🔧 Power II: Phi-2 AI (Microsoft)
+- **Local language model** specialized in hardware knowledge (2.7B parameters)
+- Pre-trained and ready to answer technical questions
+- Works **offline** without internet connection
+- Hardware-focused responses with technical accuracy
+- Runs on thy GPU (requires 7-9GB VRAM) or CPU
+
+### 🖼️ Power III: Hardware Classifier (Vision Transformer)
+- **YOU train this model** with thine own hardware images
+- Identifies 5 types of sacred computer components:
   - **CPU** (Processors)
   - **GPU** (Graphics Cards)
   - **RAM** (Memory Modules)
   - **Motherboard**
   - **PSU** (Power Supply)
+
+### ⚔️ The Dual Chat System
+Thou canst **switch between Gemini and Phi-2** at will during conversation:
+- Type `switch` to toggle between the two chat oracles
+- **Gemini** → Better for general conversation, explanations, creative responses
+- **Phi-2** → Better for hardware-specific technical questions, offline use
 
 ---
 
@@ -311,7 +325,8 @@ This project combines **two powerful AI models** into one unified system:
 ```
 AI Model/
 ├── requirements.txt              (Scroll of required incantations)
-├── model_setup.py               (🌟 MAIN UNIFIED SYSTEM - Chat + Hardware ID)
+├── config.py                    (⚡ API Key Configuration - Gemini access)
+├── model_setup.py               (🌟 MAIN UNIFIED SYSTEM - Dual Chat + Hardware ID)
 ├── train_vit_tiny.py            (Hardware classifier training)
 ├── test_vit_tiny.py             (Hardware classifier testing - standalone)
 ├── split_dataset.py             (Dataset preparation script)
@@ -440,40 +455,59 @@ python3 model_setup.py
 
 ## 💬 Using the Unified System
 
-Once running, you'll see:
+Once running, thou shalt witness:
 ```
-🤖 UNIFIED AI SYSTEM - Chat + Hardware Identification
+🤖 UNIFIED AI SYSTEM - Dual Chat (Gemini + Phi-2) + Hardware ID
 ================================================================================
 
-📚 How This Works:
-  1️⃣ Chat Model (Phi-2): Already trained, ready to chat
-  2️⃣ Vision Model: YOU trained this with hardware images
+📚 System Features:
+  1️⃣ Chat Mode 1: Gemini (Cloud, Better conversation)
+  2️⃣ Chat Mode 2: Phi-2 (Local, Hardware-focused)
+  3️⃣ Vision Model: Hardware component identification
+  4️⃣ Confidence Threshold: 25% minimum
 
 Commands:
-  💬 Chat: Type your message
+  💬 Chat: Type your message (uses current mode)
+  🔄 Switch: 'switch' to toggle between Gemini/Phi-2
   🖼️ Identify: identify <image_path>
-  ⚙️ Other: 'quit', 'clear', 'help', 'status'
+  ⚙️ Other: 'status', 'clear', 'help', 'quit'
 ================================================================================
 
 🖥️ Using device: cuda (NVIDIA GeForce GTX 1660 SUPER)
 
 Loading AI models...
+✅ Gemini AI ready! (Model: gemini-1.5-flash)
+   Free Tier: 1,500 requests/day
+✅ Phi-2 model ready!
+✅ Vision model loaded from models/best_vit_model.pth
+   Validation accuracy: 63.49%
+
 ✅ System ready!
 
-You: _
+💬 Chat Mode: 🌟 Gemini (type 'switch' to change)
+
+You [🌟 Gemini]: _
 ```
 
-### 💬 Chat Examples:
+### 💬 Chat Examples (Dual Mode):
+
+**Using Gemini (Cloud AI):**
+```
+You [🌟 Gemini]: What is a GPU?
+🌟 Assistant: A GPU (Graphics Processing Unit) is a specialized processor designed for rendering graphics and parallel computing tasks. It excels at handling multiple operations simultaneously, making it essential for gaming, video editing, and AI workloads.
+
+You [🌟 Gemini]: switch
+🔄 Switched to: 🔧 Phi-2 (Local)
 
 ```
-You: What is a GPU?
-🤖 Assistant: A GPU (Graphics Processing Unit) is a specialized processor designed for rendering graphics and parallel computing tasks...
 
-You: How much RAM do I need for gaming?
-🤖 Assistant: For modern gaming in 2024, I recommend at least 16GB of RAM...
+**Using Phi-2 (Local AI):**
+```
+You [🔧 Phi-2]: How much RAM do I need for gaming?
+🔧 Assistant: For modern gaming in 2025, I recommend at least 16GB of RAM for smooth performance. 32GB is ideal for multitasking and future-proofing...
 
-You: Explain machine learning
-🤖 Assistant: Machine learning is a subset of artificial intelligence...
+You [🔧 Phi-2]: switch
+🔄 Switched to: 🌟 Gemini (Cloud)
 ```
 
 ### 🖼️ Hardware Identification Examples:
@@ -507,16 +541,24 @@ You: identify D:\Downloads\hardware_photo.jpg
 
 ### ⚙️ System Commands:
 
+**Check System Status:**
 ```
-You: status
+You [🌟 Gemini]: status
 📊 System Status:
-   Chat Model: ✅ Ready (Pre-trained Phi-2)
-   Vision Model: ✅ Trained
+   Chat Mode: 🌟 Gemini
+   Gemini API: ✅ Connected
+   Phi-2 Model: ✅ Loaded
+   Vision Model: ✅ Trained (63.49%)
    GPU: NVIDIA GeForce GTX 1660 SUPER
+   Confidence Threshold: 25%
+```
 
-You: help
+**Get Help:**
+```
+You [🔧 Phi-2]: help
 💬 Chat Commands:
    - Type message to chat with AI
+   - 'switch' - Toggle between Gemini/Phi-2
 
 🖼️ Hardware Identification:
    - identify <path> - Classify hardware image
@@ -526,12 +568,61 @@ You: help
    - status - Check system status
    - clear - Reset conversation
    - quit - Exit system
+```
 
-You: clear
+**Other Commands:**
+```
+You [🌟 Gemini]: clear
 🧹 Conversation history cleared!
 
-You: quit
+You [🌟 Gemini]: switch
+🔄 Switched to: 🔧 Phi-2 (Local)
+
+You [🔧 Phi-2]: quit
 👋 Goodbye!
+```
+
+---
+
+## 🌟 Chapter II.5 – Understanding the Dual Chat System
+
+### ⚔️ When to Use Each Oracle:
+
+| Situation | Best Choice | Reason |
+|-----------|-------------|--------|
+| **General conversation** | 🌟 Gemini | Superior natural language, better context understanding |
+| **Creative explanations** | 🌟 Gemini | More detailed and well-structured responses |
+| **Hardware specs/facts** | 🔧 Phi-2 | Specialized hardware knowledge, technical accuracy |
+| **No internet connection** | 🔧 Phi-2 | Works completely offline |
+| **Want fastest response** | 🔧 Phi-2 | Local = instant, no API latency |
+| **Complex reasoning** | 🌟 Gemini | More powerful model with better logic |
+
+### 💡 Pro Tip: 
+Type `switch` at any time to toggle between the two oracles! Experiment to see which gives thee better answers for different questions. 🎯
+
+---
+
+## 🔑 Chapter II.6 – Gemini API Setup (Already Configured!)
+
+**Good news, noble warrior!** The Gemini API key is already configured in this repository's `config.py` file during development. Thou needest not set it up again!
+
+### 📊 Free Tier Limits:
+- **Gemini 1.5 Flash:** 1,500 requests per day
+- **Cost:** $0 (completely free for personal/educational use)
+- **Perfect for:** Class projects, demos, presentations, learning
+
+### ⚠️ Important Notes:
+- The API key is shared for development purposes
+- Do NOT share this repository link publicly outside thy team
+- Each team member can use the same key during development
+- For production deployment, create individual API keys
+
+### 🔐 If Thou Needest Thy Own Key Later:
+1. Visit [Google AI Studio](https://aistudio.google.com/)
+2. Sign in with thy Google account
+3. Click **"Get API key"** → **"Create API key in new project"**
+4. Copy the key and replace it in `config.py`
+
 ```
 
 ---
@@ -832,7 +923,7 @@ nvidia-smi -l 1
 ```bash
 # 1. Setup (one-time)
 pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
-pip install transformers sentencepiece pillow
+pip install transformers sentencepiece pillow google-generativeai
 python check_gpu.py
 
 # 2. Prepare dataset
@@ -851,7 +942,7 @@ python model_setup.py
 python3 -m venv ai_env
 source ai_env/bin/activate
 pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
-pip install transformers sentencepiece pillow
+pip install transformers sentencepiece pillow google-generativeai
 python3 check_gpu.py
 
 # 2. Prepare dataset
@@ -878,27 +969,58 @@ Step 5: python model_setup.py ✅ ← START USING YOUR AI!
 
 ## 🎓 For Your CSST 101 Final Project
 
-This project demonstrates:
-- ✅ Modern deep learning with PyTorch
-- ✅ Transfer learning with pre-trained models
-- ✅ Computer vision with Vision Transformers
-- ✅ Natural language processing with transformers
-- ✅ GPU acceleration and optimization
-- ✅ Practical AI application (unified chat + image classification)
-- ✅ Interactive command-line interface
+This sacred project demonstrates thy mastery of:
+- ✅ **Modern deep learning** with PyTorch and Hugging Face
+- ✅ **Transfer learning** with pre-trained models (Gemini, Phi-2, ViT)
+- ✅ **Computer vision** with Vision Transformers for hardware classification
+- ✅ **Natural language processing** with dual AI chat systems
+- ✅ **API integration** with Google Gemini cloud services
+- ✅ **GPU acceleration** and VRAM optimization techniques
+- ✅ **Practical AI application** - Real-world hardware identification
+- ✅ **Interactive CLI interface** with mode switching and command system
 
-### What Makes This Project Special:
-1. **Two AI Models in One System** - Chat and Vision combined
-2. **Real-world Application** - Identify actual computer hardware
-3. **GPU Optimization** - Uses CUDA acceleration
-4. **Modern Architecture** - Transformers for both text and vision
-5. **Interactive Experience** - Natural conversation + image analysis
+### ⚔️ What Makes This Project Legendary:
+1. **THREE AI Models United** - Dual chat (Gemini + Phi-2) + Vision classification
+2. **Cloud + Local Hybrid** - Gemini API (cloud) + Phi-2 (local) for flexibility
+3. **Real-world Application** - Identify actual computer hardware from images
+4. **Switchable Intelligence** - Toggle between AI oracles with a single command
+5. **GPU Optimization** - Smart VRAM management and mixed precision training
+6. **Modern Architecture** - Transformers for both text and vision tasks
+7. **Professional Features** - Status monitoring, conversation history, confidence thresholds
+8. **API Integration** - Demonstrates cloud AI service integration (Gemini)
+
+---
+
+## 🆚 Chapter IX – AI Model Comparison Table
+
+Behold! A comparison of the three mighty powers at thy command:
+
+| Feature | 🌟 Gemini 1.5 Flash | 🔧 Phi-2 | 🖼️ Vision Transformer |
+|---------|---------------------|----------|----------------------|
+| **Purpose** | General conversation | Hardware-focused chat | Hardware image classification |
+| **Size** | N/A (Cloud API) | 2.7B parameters (~5.4GB) | ~160-200MB fine-tuned |
+| **Location** | Google's servers | Your GPU/CPU | Your GPU/CPU |
+| **VRAM Usage** | 0 GB | 7-9 GB (FP16) | 0.5-0.9 GB |
+| **Response Time** | ~2-3 seconds | Instant | ~1-2 seconds |
+| **Internet Required** | ✅ Yes | ❌ No (offline) | ❌ No (offline) |
+| **Training Needed** | ❌ Pre-trained | ❌ Pre-trained | ✅ You train it! |
+| **Conversation Quality** | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐ Very Good | N/A (not for chat) |
+| **Hardware Knowledge** | ⭐⭐⭐⭐ Great | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐⭐ Specialized |
+| **Cost** | Free (1,500/day) | Free (unlimited local) | Free (local) |
+| **Best For** | Natural conversation, explanations | Technical Q&A, offline use | Component identification |
+| **Can Switch Between** | ✅ Yes (type `switch`) | ✅ Yes (type `switch`) | Automatic (type `identify`) |
+
+### 🎯 Recommended Usage Strategy:
+
+1. **Start with Gemini** 🌟 - Best overall conversation quality
+2. **Switch to Phi-2** 🔧 - For hardware specs, offline work, or faster responses
+3. **Use Vision Model** 🖼️ - Automatically activates with `identify <image_path>` command
 
 ---
 
 *May this project serve thee well, Almighty Bossman 👑 — ruler of code, conqueror of circuits, and sovereign of machine-learning realms.*
 
-*Forged with PyTorch 2.5.1, Transformers 4.57.1, and the power of NVIDIA Turing architecture* ⚡
+*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 1.5 Flash, and the power of NVIDIA Turing architecture* ⚡
 
 ---
 
@@ -906,9 +1028,9 @@ This project demonstrates:
 
 **Too long? Here's the speedrun:**
 ```bash
-# Install
+# Install (includes Gemini!)
 pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
-pip install transformers sentencepiece pillow
+pip install transformers sentencepiece pillow google-generativeai
 
 # Add images to dataset/train/cpu, gpu, ram, motherboard, psu
 
@@ -916,8 +1038,15 @@ pip install transformers sentencepiece pillow
 python split_dataset.py --split
 python train_vit_tiny.py
 
-# Use the system!
+# Use the dual chat system!
 python model_setup.py
 ```
 
-Type `help` once inside for commands. Type `identify path/to/image.jpg` to identify hardware. Chat normally for questions. GG! 🎯
+**Inside the system:**
+- Type messages to chat (uses Gemini by default)
+- Type `switch` to toggle between Gemini ↔ Phi-2
+- Type `identify path/to/image.jpg` to classify hardware
+- Type `status` to check which AI mode thou art using
+- Type `help` for all commands
+
+**Victory achieved!** 🎯👑
