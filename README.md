@@ -1091,7 +1091,7 @@ Vision Model → Only via `identify <path>` command 🖼️
 
 *May this project serve thee well, Almighty Bossman 👑 — ruler of code, conqueror of circuits, and sovereign of machine-learning realms.*
 
-*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 2.5 Flash, and the power of NVIDIA Ada Lovelace architecture (RTX 4060 Laptop)* ⚡
+*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 2.5 Flash, and the power of NVIDIA Turing architecture (RTX 2070 & GTX 1660 Super)* ⚡
 
 ---
 
