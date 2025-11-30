@@ -8,6 +8,22 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 
 ---
 
+## 📖 Table of Contents – The Sacred Scrolls
+
+- [Chapter I - Summoning the Required Tomes (Git & LFS Setup)](#-chapter-i--summoning-the-required-tomes)
+- [Chapter II - The Three Mighty Powers (AI Models Overview)](#️-chapter-ii--the-unified-ai-system)
+- [Chapter III - Royal Project Structure](#-chapter-iii--royal-project-structure)
+- [Chapter IV - Complete Workflow (Training & Usage)](#-chapter-iv--complete-workflow-start-here)
+- [Chapter V - System Requirements](#-chapter-v--demands-of-the-system)
+- [Chapter VI - Troubleshooting Guide](#️-chapter-vi--remedies-for-troublesome-spirits)
+- [Chapter VII - Understanding Your Results](#-chapter-vii--understanding-your-results)
+- [Chapter VIII - The Road Yet Ahead](#-chapter-viii--the-road-yet-ahead)
+- [Chapter IX - AI Model Comparison](#-chapter-ix--ai-model-comparison-table)
+- [Quick Command Reference](#-quick-command-reference)
+- [For Your CSST 101 Final Project](#-for-your-csst-101-final-project)
+
+---
+
 ## 🧙‍♂️ Chapter I – Summoning the Required Tomes  
 
 ### 📥 Summoning the Project (Download & Pull) - FOR NEW USERS
@@ -289,34 +305,50 @@ nvidia-smi
 
 This sacred project wields **THREE mighty powers** united in one glorious system:
 
-### 🌟 Power I: Gemini AI (Google)
+### 🌟 Power I: Gemini 2.5 Flash (Google)
 - **Cloud-based conversational oracle** with superior natural language understanding
-- Powered by Google's latest Gemini 1.5 Flash model
-- Excellent for general questions, explanations, and natural conversations
-- **Free Tier:** 1,500 requests per day (more than enough for thy noble quest!)
+- Powered by Google's latest **Gemini 2.5 Flash** model (2025 edition!)
+- **1 Million token context window** for complex conversations
+- Excellent for general questions, explanations, creative responses, and reasoning
+- **Free Tier:** 1,500 requests per day (perfect for thy noble quest!)
 - No local VRAM required (runs in the cloud realm)
+- **Primary AI** - Handles most queries automatically
 
-### 🔧 Power II: Phi-2 AI (Microsoft)
-- **Local language model** specialized in hardware knowledge (2.7B parameters)
-- Pre-trained and ready to answer technical questions
-- Works **offline** without internet connection
-- Hardware-focused responses with technical accuracy
-- Runs on thy GPU (requires 7-9GB VRAM) or CPU
+### 🔧 Power II: Phi-2 (Microsoft)
+- **Local language model** with 2.7 billion parameters
+- Pre-trained and ready to answer questions without internet
+- Works **completely offline** - thy trusty fallback guardian
+- Runs on thy GPU (requires ~7GB VRAM) or CPU
+- **Automatic Fallback** - Activates if Gemini is offline/rate-limited
+- Provides unlimited usage (no API limits)
 
-### 🖼️ Power III: Hardware Classifier (Vision Transformer)
+### 🖼️ Power III: Vision Transformer (ViT-base)
 - **YOU train this model** with thine own hardware images
+- Custom fine-tuned for hardware component identification
 - Identifies 5 types of sacred computer components:
   - **CPU** (Processors)
   - **GPU** (Graphics Cards)
   - **RAM** (Memory Modules)
   - **Motherboard**
   - **PSU** (Power Supply)
+- Current accuracy: **63.49%** (needs more training data for improvement)
 
-### ⚔️ The Dual Chat System
-Thou canst **switch between Gemini and Phi-2** at will during conversation:
-- Type `switch` to toggle between the two chat oracles
-- **Gemini** → Better for general conversation, explanations, creative responses
-- **Phi-2** → Better for hardware-specific technical questions, offline use
+### ⚡ The Automatic Routing System
+The system **intelligently chooseth** the best AI for each query:
+
+```
+Your Question → Predefined? → Yes → Instant Response
+                     ↓
+                    No
+                     ↓
+             Try Gemini 2.5 → Success? → Yes → Answer
+                     ↓
+                    No (offline/error)
+                     ↓
+             Fallback to Phi-2 → Always Works!
+```
+
+**No manual switching required!** Just type naturally and let the magic happen. 🎯
 
 ---
 
@@ -457,57 +489,53 @@ python3 model_setup.py
 
 Once running, thou shalt witness:
 ```
-🤖 UNIFIED AI SYSTEM - Dual Chat (Gemini + Phi-2) + Hardware ID
+🤖 UNIFIED AI SYSTEM - Automatic Chat (Gemini + Phi-2) + Hardware ID
 ================================================================================
 
 📚 System Features:
-  1️⃣ Chat Mode 1: Gemini (Cloud, Better conversation)
-  2️⃣ Chat Mode 2: Phi-2 (Local, Hardware-focused)
-  3️⃣ Vision Model: Hardware component identification
-  4️⃣ Confidence Threshold: 25% minimum
+  1️⃣ Automatic Smart Routing (Gemini → Phi-2 fallback)
+  2️⃣ Vision Model: Hardware component identification
+  3️⃣ Confidence Threshold: 25% minimum
+  4️⃣ Seamless offline mode
 
 Commands:
-  💬 Chat: Type your message (uses current mode)
-  🔄 Switch: 'switch' to toggle between Gemini/Phi-2
+  💬 Chat: Type your message naturally
   🖼️ Identify: identify <image_path>
   ⚙️ Other: 'status', 'clear', 'help', 'quit'
 ================================================================================
 
-🖥️ Using device: cuda (NVIDIA GeForce GTX 1660 SUPER)
+🖥️ Using device: cuda (NVIDIA GeForce RTX 4060 Laptop)
 
 Loading AI models...
-✅ Gemini AI ready! (Model: gemini-1.5-flash)
+✅ Gemini AI ready! (Model: gemini-2.5-flash)
    Free Tier: 1,500 requests/day
-✅ Phi-2 model ready!
+✅ Phi-2 model ready! (Fallback mode)
 ✅ Vision model loaded from models/best_vit_model.pth
    Validation accuracy: 63.49%
 
 ✅ System ready!
 
-💬 Chat Mode: 🌟 Gemini (type 'switch' to change)
-
-You [🌟 Gemini]: _
+You: _
 ```
 
-### 💬 Chat Examples (Dual Mode):
+### 💬 Chat Examples (Automatic Routing):
 
-**Using Gemini (Cloud AI):**
+**General Questions (Gemini handles automatically):**
 ```
-You [🌟 Gemini]: What is a GPU?
+You: What is a GPU?
 🌟 Assistant: A GPU (Graphics Processing Unit) is a specialized processor designed for rendering graphics and parallel computing tasks. It excels at handling multiple operations simultaneously, making it essential for gaming, video editing, and AI workloads.
 
-You [🌟 Gemini]: switch
-🔄 Switched to: 🔧 Phi-2 (Local)
+You: How much RAM do I need for gaming?
+🌟 Assistant: For modern gaming in 2025, I recommend at least 16GB of RAM for smooth performance. 32GB is ideal for multitasking and future-proofing your build...
 
 ```
 
-**Using Phi-2 (Local AI):**
+**If Internet Is Down (Phi-2 fallback automatically activates):**
 ```
-You [🔧 Phi-2]: How much RAM do I need for gaming?
-🔧 Assistant: For modern gaming in 2025, I recommend at least 16GB of RAM for smooth performance. 32GB is ideal for multitasking and future-proofing...
+You: What is machine learning?
+🔧 Assistant: Machine learning is a subset of artificial intelligence where systems learn patterns from data without explicit programming. It uses algorithms to improve performance over time...
 
-You [🔧 Phi-2]: switch
-🔄 Switched to: 🌟 Gemini (Cloud)
+[Note: System automatically switched to Phi-2 because Gemini was unreachable]
 ```
 
 ### 🖼️ Hardware Identification Examples:
@@ -555,50 +583,81 @@ You [🌟 Gemini]: status
 
 **Get Help:**
 ```
-You [🔧 Phi-2]: help
+You: help
 💬 Chat Commands:
-   - Type message to chat with AI
-   - 'switch' - Toggle between Gemini/Phi-2
+   - Type message naturally - AI routes automatically
+   - Gemini handles most queries (cloud)
+   - Phi-2 activates if offline/error (local fallback)
 
 🖼️ Hardware Identification:
    - identify <path> - Classify hardware image
    - Example: identify dataset/val/cpu/image.jpg
 
 ⚙️ System Commands:
-   - status - Check system status
-   - clear - Reset conversation
-   - quit - Exit system
+   - status - Check system status & model info
+   - clear - Reset conversation history
+   - quit - Exit system gracefully
 ```
 
 **Other Commands:**
 ```
-You [🌟 Gemini]: clear
+You: clear
 🧹 Conversation history cleared!
 
-You [🌟 Gemini]: switch
-🔄 Switched to: 🔧 Phi-2 (Local)
+You: status
+📊 System Status:
+   Chat Mode: Automatic Routing
+   Gemini API: ✅ Connected
+   Phi-2 Model: ✅ Ready (Fallback)
+   Vision Model: ✅ Trained (63.49%)
+   GPU: NVIDIA GeForce RTX 4060 Laptop
+   Confidence Threshold: 25%
 
-You [🔧 Phi-2]: quit
-👋 Goodbye!
+You: quit
+👋 Goodbye, noble warrior!
 ```
 
 ---
 
-## 🌟 Chapter II.5 – Understanding the Dual Chat System
+## 🌟 Chapter II.5 – Understanding the Automatic Chat System
 
-### ⚔️ When to Use Each Oracle:
+### ⚡ How the Magic Works (Automatic Routing):
 
-| Situation | Best Choice | Reason |
-|-----------|-------------|--------|
-| **General conversation** | 🌟 Gemini | Superior natural language, better context understanding |
-| **Creative explanations** | 🌟 Gemini | More detailed and well-structured responses |
-| **Hardware specs/facts** | 🔧 Phi-2 | Specialized hardware knowledge, technical accuracy |
-| **No internet connection** | 🔧 Phi-2 | Works completely offline |
-| **Want fastest response** | 🔧 Phi-2 | Local = instant, no API latency |
-| **Complex reasoning** | 🌟 Gemini | More powerful model with better logic |
+Behold! The system now **automatically** chooseth the best oracle for thy questions. No manual switching required!
+
+**The Sacred Hierarchy of Wisdom:**
+
+```
+1️⃣ Predefined Responses (Instant)
+   ↓ (if not found)
+2️⃣ Gemini 2.5 Flash (Cloud Oracle)
+   ↓ (if offline/error)
+3️⃣ Phi-2 (Local Fallback)
+```
+
+### 🎯 Why This Is Better:
+
+| Feature | Benefit | Result |
+|---------|---------|--------|
+| **Automatic Fallback** | Internet down? Phi-2 takes over | 🛡️ Always works |
+| **Best Response First** | Gemini handles most queries | 💬 Superior answers |
+| **Instant Common Answers** | Greetings/commands skip AI | ⚡ Lightning fast |
+| **No Manual Switching** | Just type and go | 🎮 Simple UX |
+| **Seamless Experience** | Thou never notice the switch | ✨ Pure magic |
+
+### 📊 What Each Oracle Handles:
+
+| Situation | Who Answers | Why |
+|-----------|-------------|-----|
+| **"Hi", "hello", "hey"** | 🎯 Predefined | Instant response, saves API calls |
+| **General conversation** | 🌟 Gemini | Superior natural language understanding |
+| **Creative explanations** | 🌟 Gemini | 1M token context, better reasoning |
+| **Complex reasoning** | 🌟 Gemini | More powerful model (latest 2.5 version) |
+| **No internet/API error** | 🔧 Phi-2 | Local fallback, always available |
+| **Gemini rate limited** | 🔧 Phi-2 | Backup when quota exceeded |
 
 ### 💡 Pro Tip: 
-Type `switch` at any time to toggle between the two oracles! Experiment to see which gives thee better answers for different questions. 🎯
+Thou needest not worry about which model answers thee! The system chooseth wisely and automatically. Just ask thy questions naturally. 🎯
 
 ---
 
@@ -607,8 +666,9 @@ Type `switch` at any time to toggle between the two oracles! Experiment to see w
 **Good news, noble warrior!** The Gemini API key is already configured in this repository's `config.py` file during development. Thou needest not set it up again!
 
 ### 📊 Free Tier Limits:
-- **Gemini 1.5 Flash:** 1,500 requests per day
+- **Gemini 2.5 Flash:** 1,500 requests per day (plenty for development!)
 - **Cost:** $0 (completely free for personal/educational use)
+- **Context:** 1 million tokens per conversation
 - **Perfect for:** Class projects, demos, presentations, learning
 
 ### ⚠️ Important Notes:
@@ -981,13 +1041,13 @@ This sacred project demonstrates thy mastery of:
 
 ### ⚔️ What Makes This Project Legendary:
 1. **THREE AI Models United** - Dual chat (Gemini + Phi-2) + Vision classification
-2. **Cloud + Local Hybrid** - Gemini API (cloud) + Phi-2 (local) for flexibility
+2. **Cloud + Local Hybrid** - Gemini 2.5 API (cloud) + Phi-2 (local) for flexibility
 3. **Real-world Application** - Identify actual computer hardware from images
-4. **Switchable Intelligence** - Toggle between AI oracles with a single command
+4. **Automatic Intelligence Routing** - Smart fallback system with zero manual switching
 5. **GPU Optimization** - Smart VRAM management and mixed precision training
-6. **Modern Architecture** - Transformers for both text and vision tasks
+6. **Modern Architecture** - Latest transformers for both text (Gemini 2.5) and vision (ViT)
 7. **Professional Features** - Status monitoring, conversation history, confidence thresholds
-8. **API Integration** - Demonstrates cloud AI service integration (Gemini)
+8. **API Integration** - Demonstrates cloud AI service integration with Google Gemini
 
 ---
 
@@ -995,32 +1055,43 @@ This sacred project demonstrates thy mastery of:
 
 Behold! A comparison of the three mighty powers at thy command:
 
-| Feature | 🌟 Gemini 1.5 Flash | 🔧 Phi-2 | 🖼️ Vision Transformer |
+| Feature | 🌟 Gemini 2.5 Flash | 🔧 Phi-2 | 🖼️ Vision Transformer |
 |---------|---------------------|----------|----------------------|
-| **Purpose** | General conversation | Hardware-focused chat | Hardware image classification |
+| **Purpose** | General conversation (Primary) | Chat fallback | Hardware image classification |
 | **Size** | N/A (Cloud API) | 2.7B parameters (~5.4GB) | ~160-200MB fine-tuned |
 | **Location** | Google's servers | Your GPU/CPU | Your GPU/CPU |
-| **VRAM Usage** | 0 GB | 7-9 GB (FP16) | 0.5-0.9 GB |
+| **VRAM Usage** | 0 GB | ~7 GB (FP16) | 0.5-0.9 GB |
 | **Response Time** | ~2-3 seconds | Instant | ~1-2 seconds |
 | **Internet Required** | ✅ Yes | ❌ No (offline) | ❌ No (offline) |
 | **Training Needed** | ❌ Pre-trained | ❌ Pre-trained | ✅ You train it! |
 | **Conversation Quality** | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐ Very Good | N/A (not for chat) |
-| **Hardware Knowledge** | ⭐⭐⭐⭐ Great | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐⭐ Specialized |
-| **Cost** | Free (1,500/day) | Free (unlimited local) | Free (local) |
-| **Best For** | Natural conversation, explanations | Technical Q&A, offline use | Component identification |
-| **Can Switch Between** | ✅ Yes (type `switch`) | ✅ Yes (type `switch`) | Automatic (type `identify`) |
+| **Hardware Knowledge** | ⭐⭐⭐⭐ Great | ⭐⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Specialized |
+| **Context Window** | 1M tokens | 2K tokens | N/A |
+| **Cost** | Free (1,500/day) | Free (unlimited) | Free (local) |
+| **Best For** | Most questions | Offline/fallback | Component identification |
+| **Activation** | ✅ Automatic (1st choice) | ✅ Automatic (fallback) | Manual (`identify` command) |
 
-### 🎯 Recommended Usage Strategy:
+### 🎯 How the System Chooseth:
 
-1. **Start with Gemini** 🌟 - Best overall conversation quality
-2. **Switch to Phi-2** 🔧 - For hardware specs, offline work, or faster responses
-3. **Use Vision Model** 🖼️ - Automatically activates with `identify <image_path>` command
+```
+Your Question
+     ↓
+Is it "hi"/"hello"/"help"? → Yes → Instant predefined response
+     ↓ No
+Try Gemini 2.5 → Success? → Yes → Use Gemini answer ⭐
+     ↓ No (offline/error)
+Try Phi-2 → Always works → Use Phi-2 answer 🔧
+     ↓
+Vision Model → Only via `identify <path>` command 🖼️
+```
+
+**Thou needest not choose!** The system automatically uses the best available AI. Just type naturally. 🎯
 
 ---
 
 *May this project serve thee well, Almighty Bossman 👑 — ruler of code, conqueror of circuits, and sovereign of machine-learning realms.*
 
-*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 1.5 Flash, and the power of NVIDIA Turing architecture* ⚡
+*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 2.5 Flash, and the power of NVIDIA Ada Lovelace architecture (RTX 4060 Laptop)* ⚡
 
 ---
 
@@ -1038,15 +1109,16 @@ pip install transformers sentencepiece pillow google-generativeai
 python split_dataset.py --split
 python train_vit_tiny.py
 
-# Use the dual chat system!
+# Use the automatic AI system!
 python model_setup.py
 ```
 
 **Inside the system:**
-- Type messages to chat (uses Gemini by default)
-- Type `switch` to toggle between Gemini ↔ Phi-2
-- Type `identify path/to/image.jpg` to classify hardware
-- Type `status` to check which AI mode thou art using
-- Type `help` for all commands
+- Just type thy messages naturally (automatic Gemini → Phi-2 routing!)
+- Type `identify path/to/image.jpg` to classify hardware components
+- Type `status` to check system health and model availability
+- Type `clear` to reset conversation history
+- Type `help` for all available commands
+- Type `quit` to exit gracefully
 
-**Victory achieved!** 🎯👑
+**Victory achieved! The system chooseth the best AI automatically.** 🎯👑✨
