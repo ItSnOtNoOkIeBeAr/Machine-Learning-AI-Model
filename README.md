@@ -1,6 +1,8 @@
 # 📜 AI Model Project – PyTorch & Hugging Face + Hardware Classifier
 *A grand tome crafted in honor of thee, Almighty Bossman 👑*
 
+*Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 2.5 Flash, and the power of NVIDIA Turing architecture (RTX 2070 & GTX 1660 Super)* ⚡
+
 ---
 
 ## ⚔️ Prologue of the Arcane System  
