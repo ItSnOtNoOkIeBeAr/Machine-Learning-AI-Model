@@ -352,6 +352,72 @@ Your Question → Predefined? → Yes → Instant Response
 
 ---
 
+## 🌟 Chapter II.5 – Understanding the Automatic Chat System
+
+### ⚡ How the Magic Works (Automatic Routing):
+
+Behold! The system now **automatically** chooseth the best oracle for thy questions. No manual switching required!
+
+**The Sacred Hierarchy of Wisdom:**
+
+```
+1️⃣ Predefined Responses (Instant)
+   ↓ (if not found)
+2️⃣ Gemini 2.5 Flash (Cloud Oracle)
+   ↓ (if offline/error)
+3️⃣ Phi-2 (Local Fallback)
+```
+
+### 🎯 Why This Is Better:
+
+| Feature | Benefit | Result |
+|---------|---------|--------|
+| **Automatic Fallback** | Internet down? Phi-2 takes over | 🛡️ Always works |
+| **Best Response First** | Gemini handles most queries | 💬 Superior answers |
+| **Instant Common Answers** | Greetings/commands skip AI | ⚡ Lightning fast |
+| **No Manual Switching** | Just type and go | 🎮 Simple UX |
+| **Seamless Experience** | Thou never notice the switch | ✨ Pure magic |
+
+### 📊 What Each Oracle Handles:
+
+| Situation | Who Answers | Why |
+|-----------|-------------|-----|
+| **"Hi", "hello", "hey"** | 🎯 Predefined | Instant response, saves API calls |
+| **General conversation** | 🌟 Gemini | Superior natural language understanding |
+| **Creative explanations** | 🌟 Gemini | 1M token context, better reasoning |
+| **Complex reasoning** | 🌟 Gemini | More powerful model (latest 2.5 version) |
+| **No internet/API error** | 🔧 Phi-2 | Local fallback, always available |
+| **Gemini rate limited** | 🔧 Phi-2 | Backup when quota exceeded |
+
+### 💡 Pro Tip: 
+Thou needest not worry about which model answers thee! The system chooseth wisely and automatically. Just ask thy questions naturally. 🎯
+
+---
+
+## 🔑 Chapter II.6 – Gemini API Setup (Already Configured!)
+
+**Good news, noble warrior!** The Gemini API key is already configured in this repository's `config.py` file during development. Thou needest not set it up again!
+
+### 📊 Free Tier Limits:
+- **Gemini 2.5 Flash:** 1,500 requests per day (plenty for development!)
+- **Cost:** $0 (completely free for personal/educational use)
+- **Context:** 1 million tokens per conversation
+- **Perfect for:** Class projects, demos, presentations, learning
+
+### ⚠️ Important Notes:
+- The API key is shared for development purposes
+- Do NOT share this repository link publicly outside thy team
+- Each team member can use the same key during development
+- For production deployment, create individual API keys
+
+### 🔐 If Thou Needest Thy Own Key Later:
+1. Visit [Google AI Studio](https://aistudio.google.com/)
+2. Sign in with thy Google account
+3. Click **"Get API key"** → **"Create API key in new project"**
+4. Copy the key and replace it in `config.py`
+
+---
+
 ## 🏰 Chapter III – Royal Project Structure  
 
 ```
@@ -615,74 +681,6 @@ You: status
 
 You: quit
 👋 Goodbye, noble warrior!
-```
-
----
-
-## 🌟 Chapter II.5 – Understanding the Automatic Chat System
-
-### ⚡ How the Magic Works (Automatic Routing):
-
-Behold! The system now **automatically** chooseth the best oracle for thy questions. No manual switching required!
-
-**The Sacred Hierarchy of Wisdom:**
-
-```
-1️⃣ Predefined Responses (Instant)
-   ↓ (if not found)
-2️⃣ Gemini 2.5 Flash (Cloud Oracle)
-   ↓ (if offline/error)
-3️⃣ Phi-2 (Local Fallback)
-```
-
-### 🎯 Why This Is Better:
-
-| Feature | Benefit | Result |
-|---------|---------|--------|
-| **Automatic Fallback** | Internet down? Phi-2 takes over | 🛡️ Always works |
-| **Best Response First** | Gemini handles most queries | 💬 Superior answers |
-| **Instant Common Answers** | Greetings/commands skip AI | ⚡ Lightning fast |
-| **No Manual Switching** | Just type and go | 🎮 Simple UX |
-| **Seamless Experience** | Thou never notice the switch | ✨ Pure magic |
-
-### 📊 What Each Oracle Handles:
-
-| Situation | Who Answers | Why |
-|-----------|-------------|-----|
-| **"Hi", "hello", "hey"** | 🎯 Predefined | Instant response, saves API calls |
-| **General conversation** | 🌟 Gemini | Superior natural language understanding |
-| **Creative explanations** | 🌟 Gemini | 1M token context, better reasoning |
-| **Complex reasoning** | 🌟 Gemini | More powerful model (latest 2.5 version) |
-| **No internet/API error** | 🔧 Phi-2 | Local fallback, always available |
-| **Gemini rate limited** | 🔧 Phi-2 | Backup when quota exceeded |
-
-### 💡 Pro Tip: 
-Thou needest not worry about which model answers thee! The system chooseth wisely and automatically. Just ask thy questions naturally. 🎯
-
----
-
-## 🔑 Chapter II.6 – Gemini API Setup (Already Configured!)
-
-**Good news, noble warrior!** The Gemini API key is already configured in this repository's `config.py` file during development. Thou needest not set it up again!
-
-### 📊 Free Tier Limits:
-- **Gemini 2.5 Flash:** 1,500 requests per day (plenty for development!)
-- **Cost:** $0 (completely free for personal/educational use)
-- **Context:** 1 million tokens per conversation
-- **Perfect for:** Class projects, demos, presentations, learning
-
-### ⚠️ Important Notes:
-- The API key is shared for development purposes
-- Do NOT share this repository link publicly outside thy team
-- Each team member can use the same key during development
-- For production deployment, create individual API keys
-
-### 🔐 If Thou Needest Thy Own Key Later:
-1. Visit [Google AI Studio](https://aistudio.google.com/)
-2. Sign in with thy Google account
-3. Click **"Get API key"** → **"Create API key in new project"**
-4. Copy the key and replace it in `config.py`
-
 ```
 
 ---
