@@ -572,7 +572,7 @@ Commands:
   ⚙️ Other: 'status', 'clear', 'help', 'quit'
 ================================================================================
 
-🖥️ Using device: cuda (NVIDIA GeForce GTX 1660 Super Laptop)
+🖥️ Using device: cuda (NVIDIA GeForce GTX 1660 Super)
 
 Loading AI models...
 ✅ Gemini AI ready! (Model: gemini-2.5-flash)
