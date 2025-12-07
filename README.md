@@ -109,6 +109,11 @@ Since we set the rules in Step 3 & 4, Git will now correctly grab this using LFS
 git add models/best_vit_model.pth
 ```
 
+**⚠️ Alternative: If thy model is ignored by .gitignore, force-add it thus:**
+```powershell
+git add -f models/best_vit_model.pth
+```
+
 #### **Step 6: Add the Rest of Your Code** 📚
 ```powershell
 git add .
@@ -121,6 +126,12 @@ git lfs ls-files
 ```
 
 #### **Step 8: Seal the Decree (Commit)** 🔐
+For thy trained model with excellent accuracy, proclaim thus:
+```powershell
+git commit -m "Add trained vision model (82.50% accuracy)"
+```
+
+Or for general large files:
 ```powershell
 git commit -m "Upload 1GB model via LFS"
 ```
