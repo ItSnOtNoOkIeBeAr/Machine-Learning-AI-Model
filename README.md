@@ -1154,3 +1154,181 @@ python model_setup.py
 - Type `quit` to exit gracefully
 
 **Victory achieved! The system chooseth the best AI automatically.** 🎯👑✨
+
+---
+
+## 🌐 Hosting Thy AI Models Online (Cloudflare Tunnel)
+
+**Wish to share thy mighty AI with the realm?** Follow these sacred steps to expose thy models via the internet!
+
+### 🎯 **What Thou Needest:**
+- ✅ Thy PC running (with the sacred models loaded)
+- ✅ Internet connection (for the cloud tunnel)
+- ✅ Two PowerShell windows (one for API, one for tunnel)
+
+---
+
+### **📋 Step 1: Start the API Server** 🚀
+
+Open **PowerShell Terminal 1** and proclaim:
+
+```powershell
+cd "C:\Users\Matthew Dee\Documents\School work\LSPU\School works\3rd year\1st sem\CSST 101\Final Project\AI Model"
+
+python api_server.py
+```
+
+**Wait for the prophecy:**
+```
+================================================================================
+✅ All models loaded successfully!
+📡 API ready at http://localhost:8000
+📖 Documentation at http://localhost:8000/docs
+================================================================================
+```
+
+**Keep this terminal open!** 🔥
+
+---
+
+### **📋 Step 2: Start Cloudflare Tunnel** 🌐
+
+Open **PowerShell Terminal 2** (new window) and chant:
+
+```powershell
+cd "C:\Users\Matthew Dee\Documents\School work\LSPU\School works\3rd year\1st sem\CSST 101\Final Project\AI Model"
+
+& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8000
+```
+
+**The oracle shall reveal thy public URL:**
+```
++--------------------------------------------------------------------------------------------+
+|  Your quick Tunnel has been created! Visit it at:                                         |
+|  https://random-words-xyz123.trycloudflare.com                                            |
++--------------------------------------------------------------------------------------------+
+```
+
+**Copy that sacred URL!** 📋✨
+
+---
+
+### **📋 Step 3: Share with Thy Website Builders** 🎨
+
+Send thy comrades this decree:
+
+```
+🤖 AI Hardware Assistant API
+
+Base URL: https://your-tunnel-url.trycloudflare.com
+
+📡 API Endpoints:
+  ✅ POST /chat - Converse with the AI oracle
+  ✅ POST /identify - Identify hardware from sacred images
+  ✅ GET /status - Check the system's vital signs
+  ✅ POST /clear/{session_id} - Purge conversation history
+
+📖 Interactive Documentation:
+  https://your-tunnel-url.trycloudflare.com/docs
+  (Test all endpoints in thy browser!)
+
+🧪 Verify the Magic Works:
+  https://your-tunnel-url.trycloudflare.com/status
+```
+
+---
+
+### **⚠️ Sacred Warnings:**
+
+| Warning | Reason | Solution |
+|---------|--------|----------|
+| **Keep BOTH terminals open** | Closing stops the API/tunnel | Leave them running whilst hosting |
+| **Thy PC must stay awake** | Sleep mode kills the connection | Disable sleep, keep plugged in |
+| **URL changes each restart** | Free tunnel generates new URLs | Share new URL each time thou restart |
+| **Internet required** | For both tunnel and Gemini API | Stable connection needed |
+
+---
+
+### **🎯 Alternative: Use the Batch Script!**
+
+For easier tunnel starting, simply **double-click** `start_tunnel.bat` in thy project folder instead of typing the PowerShell command! ⚡
+
+---
+
+### **🧪 Testing Thy Public API:**
+
+Once thy tunnel is active, test these sacred endpoints in thy browser:
+
+**1. Health Check:**
+```
+https://your-tunnel-url.trycloudflare.com/
+```
+Should return: `{"status":"online","message":"AI Hardware Assistant API - Ready to serve!"...}`
+
+**2. System Status:**
+```
+https://your-tunnel-url.trycloudflare.com/status
+```
+Should show: Gemini availability, Phi-2 status, Vision model accuracy (82.50%), GPU info
+
+**3. Interactive Docs:**
+```
+https://your-tunnel-url.trycloudflare.com/docs
+```
+Test all endpoints directly in thy browser! Try `/chat` with message `"hello"` 💬
+
+---
+
+### **📱 Example Vue Integration:**
+
+Thy website builders can use this sacred code:
+
+```javascript
+// src/api/aiApi.js
+import axios from 'axios';
+
+const API_BASE_URL = 'https://your-tunnel-url.trycloudflare.com';
+
+export const aiApi = {
+  // Chat with AI
+  async chat(message, sessionId = 'default') {
+    const response = await axios.post(`${API_BASE_URL}/chat`, {
+      message,
+      session_id: sessionId,
+    });
+    return response.data;
+  },
+
+  // Identify hardware
+  async identifyHardware(imageFile) {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    const response = await axios.post(`${API_BASE_URL}/identify`, formData);
+    return response.data;
+  },
+
+  // Get status
+  async getStatus() {
+    const response = await axios.get(`${API_BASE_URL}/status`);
+    return response.data;
+  },
+};
+```
+
+---
+
+### **🎮 Quick Hosting Checklist:**
+
+```
+□ Open PowerShell #1 → python api_server.py
+□ Wait for "✅ All models loaded successfully!"
+□ Open PowerShell #2 → Run cloudflared tunnel command
+□ Copy the https://....trycloudflare.com URL
+□ Share URL with website team
+□ Test /docs endpoint works
+□ Keep BOTH terminals running!
+□ Thy PC stays awake and connected
+```
+
+**Victory! Thy AI now dwells in the cloud realm, accessible to all!** 🌐👑⚡
+
