@@ -3,7 +3,7 @@ FastAPI Backend for Unified AI System
 Exposes chat and hardware identification via REST API
 """
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from model_setup import (
@@ -34,7 +34,8 @@ models = {
     "vision_model": None,
     "vision_processor": None,
     "vision_device": None,
-    "conversation_histories": {}  # Store per-session history
+    "conversation_histories": {},  # Store per-session history
+    "last_identified_hardware": {}  # Store last identified component per session
 }
 
 # Request/Response models
@@ -124,7 +125,47 @@ async def chat(request: ChatRequest):
         # Get conversation history for this session
         history = models["conversation_histories"].get(request.session_id, "")
         
-        # Generate response
+        # Check if user is asking about the last identified hardware
+        user_lower = request.message.lower().strip()
+        last_hardware = models["last_identified_hardware"].get(request.session_id)
+        
+        # DEBUG: Print to console
+        print(f"[DEBUG] Session ID: {request.session_id}")
+        print(f"[DEBUG] User message: {request.message}")
+        print(f"[DEBUG] Last hardware: {last_hardware}")
+        print(f"[DEBUG] All stored hardware: {models['last_identified_hardware']}")
+        
+        # Context-aware responses for "what's this/that"
+        if last_hardware and any(phrase in user_lower for phrase in ["what's this", "whats this", "what is this", "what's that", "whats that", "what is that", "tell me about this", "explain this"]):
+            component = last_hardware["component"]
+            confidence = last_hardware["confidence"]
+            
+            # Get detailed explanation using Gemini or Phi-2
+            explanation_prompt = f"Explain what a {component} is in computer hardware. Be brief and clear (2-3 sentences)."
+            detailed_explanation, source = unified_chat_response(
+                models["gemini"],
+                models["phi2_model"],
+                models["phi2_tokenizer"],
+                explanation_prompt,
+                ""  # No history for cleaner response
+            )
+            
+            response = f"This is a {component.upper()}! (Detected with {confidence:.1f}% confidence)\n\n{detailed_explanation}"
+            
+            # Update conversation history
+            history += f"\nUser: {request.message}\nAssistant: {response}"
+            history_parts = history.split("\nUser:")
+            if len(history_parts) > 6:
+                history = "\nUser:".join(history_parts[-6:])
+            models["conversation_histories"][request.session_id] = history
+            
+            return ChatResponse(
+                response=response,
+                source="context-aware",
+                session_id=request.session_id
+            )
+        
+        # Regular chat response
         response, source = unified_chat_response(
             models["gemini"],
             models["phi2_model"],
@@ -153,7 +194,7 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")
 
 @app.post("/identify", response_model=HardwareResponse)
-async def identify(file: UploadFile = File(...)):
+async def identify(file: UploadFile = File(...), session_id: str = Form("default")):
     """Hardware identification endpoint"""
     try:
         # Validate file type
@@ -182,6 +223,12 @@ async def identify(file: UploadFile = File(...)):
         
         if predicted is None:
             raise HTTPException(status_code=400, detail="Failed to process image")
+        
+        # Store identified hardware for context-aware chat using the provided session_id
+        models["last_identified_hardware"][session_id] = {
+            "component": predicted,
+            "confidence": float(confidence * 100)
+        }
         
         # Get top 3
         top_3_indices = all_probs.argsort()[-3:][::-1]
@@ -212,11 +259,20 @@ async def identify(file: UploadFile = File(...)):
 
 @app.post("/clear/{session_id}")
 async def clear_history(session_id: str):
-    """Clear conversation history for a session"""
+    """Clear conversation history and identified hardware for a session"""
+    cleared_items = []
+    
     if session_id in models["conversation_histories"]:
         del models["conversation_histories"][session_id]
-        return {"message": "History cleared", "session_id": session_id}
-    return {"message": "No history found", "session_id": session_id}
+        cleared_items.append("conversation history")
+    
+    if session_id in models["last_identified_hardware"]:
+        del models["last_identified_hardware"][session_id]
+        cleared_items.append("hardware context")
+    
+    if cleared_items:
+        return {"message": f"Cleared {', '.join(cleared_items)}", "session_id": session_id}
+    return {"message": "No data found", "session_id": session_id}
 
 @app.get("/status", response_model=StatusResponse)
 async def get_status():
