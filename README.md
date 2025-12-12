@@ -439,10 +439,12 @@ AI Model/
 ├── requirements.txt              (Scroll of required incantations)
 ├── config.py                    (⚡ API Key Configuration - Gemini access)
 ├── model_setup.py               (🌟 MAIN UNIFIED SYSTEM - Dual Chat + Hardware ID)
+├── api_server.py                (🌐 FastAPI Backend - REST API for web integration)
 ├── train_vit_tiny.py            (Hardware classifier training)
 ├── test_vit_tiny.py             (Hardware classifier testing - standalone)
 ├── split_dataset.py             (Dataset preparation script)
 ├── check_gpu.py                 (GPU verification tool)
+├── start_tunnel.bat             (⚡ Quick Cloudflare tunnel launcher)
 ├── GPU_SETUP_COMPLETE.md        (GPU optimization guide)
 ├── README.md                    (This noble decree)
 │
@@ -896,6 +898,131 @@ export const aiApi = {
 
 ---
 
+## 🧠 Context-Aware Chat System (Smart Hardware Recognition)
+
+**Behold!** Thy AI system now possesses **memory and awareness**! Upload an image, and the oracle shall remember what thou hast shown it! 🎯
+
+### 🌟 **How It Works:**
+
+1. **Upload Hardware Image** → System identifies: `"RAM 47.5%"`
+2. **Ask Natural Questions** → Type: `"what's this"` or `"tell me about this"`
+3. **Smart Response** → AI explains: `"This is a RAM! (Detected with 47.5% confidence) RAM provides temporary storage..."`
+
+### 🎭 **Trigger Phrases (Automatic Detection):**
+
+The system activates context-aware mode when thou speakest these sacred phrases:
+
+| Phrase | Example Response |
+|--------|------------------|
+| `"what's this"` | Explains the last uploaded hardware |
+| `"whats this"` | (Alternative spelling works!) |
+| `"what is this"` | Formal version accepted |
+| `"what's that"` | Points to previous detection |
+| `"whats that"` | Casual variant recognized |
+| `"what is that"` | Another formal option |
+| `"tell me about this"` | Detailed explanation mode |
+| `"explain this"` | Technical breakdown provided |
+
+### 💡 **Usage Examples:**
+
+**Example 1: Upload → Ask**
+```
+1. Upload motherboard image
+   → System detects: MOTHERBOARD (48.0%)
+   
+2. You type: "what's this"
+   
+3. AI responds:
+   "This is a MOTHERBOARD! (Detected with 48.0% confidence)
+   
+   A motherboard is the main circuit board that connects all computer 
+   components together, including the CPU, RAM, GPU, and storage devices. 
+   It serves as the communication backbone of the entire system."
+```
+
+**Example 2: Multiple Uploads**
+```
+1. Upload GPU image → Detects: GPU (89.2%)
+2. Ask: "tell me about this"
+   → Explains GPU functions
+   
+3. Upload RAM image → Detects: RAM (47.5%)
+4. Ask: "what's that"
+   → Explains RAM (overwrites previous GPU context)
+```
+
+**Example 3: Regular Chat Still Works**
+```
+1. Upload CPU image → Detects: CPU (85.3%)
+2. Ask: "hello" 
+   → Normal greeting response (not asking about hardware)
+3. Ask: "what's this"
+   → NOW explains the CPU!
+```
+
+### 🔐 **Session Management (Multi-User Support):**
+
+Each user gets their own **session_id** to keep conversations and hardware detections separate!
+
+**How Sessions Work:**
+```
+User A uploads RAM → Stored under session_id: "user-abc-123"
+User B uploads GPU → Stored under session_id: "user-xyz-789"
+
+User A asks "what's this" → Gets RAM explanation
+User B asks "what's this" → Gets GPU explanation
+(They don't interfere with each other!)
+```
+
+**API Usage with Sessions:**
+```javascript
+// Upload image with session tracking
+const formData = new FormData();
+formData.append('file', imageFile);
+formData.append('session_id', userSessionId);  // ← Track user context!
+
+await fetch('/identify', { method: 'POST', body: formData });
+
+// Chat with same session
+await fetch('/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    message: "what's this",
+    session_id: userSessionId  // ← Match the upload session!
+  })
+});
+```
+
+### 🧹 **Clear Context:**
+```
+POST /clear/{session_id}
+```
+Clears both conversation history AND hardware detection context for that session. Fresh start! 🔄
+
+### ⚡ **Technical Flow:**
+
+1. **`/identify` endpoint** receives image + session_id
+2. Classifies hardware (e.g., "RAM 47.5%")
+3. Stores result in `last_identified_hardware[session_id]`
+4. **`/chat` endpoint** receives message + session_id
+5. Checks if message contains trigger phrases
+6. Retrieves `last_identified_hardware[session_id]`
+7. Generates detailed explanation using Gemini/Phi-2
+8. Returns formatted response with confidence level
+
+### 🎯 **Pro Tips:**
+
+✅ **Works Offline:** Uses Phi-2 fallback if Gemini unavailable  
+✅ **Smart Detection:** Only activates for specific "what's this" phrases  
+✅ **Fresh Explanations:** AI generates new responses each time (not pre-defined)  
+✅ **Multi-User Safe:** Each session independent (3+ users simultaneously)  
+✅ **Context Persists:** Upload once, ask multiple questions about it  
+
+**Thy AI is now truly intelligent, remembering what thou hast shown it and answering with wisdom!** 🧙‍♂️✨
+
+---
+
 ## 🧪 Optional: Test Vision Model Separately
 
 If you want to test the vision model without the chat interface:
@@ -1144,6 +1271,173 @@ nvidia-smi -l 1
 
 ---
 
+### ⚠️ Context-Aware Chat Not Working
+
+**Symptoms:** Upload image, type "what's this", get generic response instead of hardware explanation
+
+**Solution 1: Check Session ID Matching**
+
+Your website **MUST** send the same `session_id` for both image upload and chat:
+
+```javascript
+// ❌ WRONG - Different session IDs
+formData.append('session_id', 'user-123');  // Upload
+fetch('/chat', { body: { session_id: 'default' } });  // Chat - DIFFERENT!
+
+// ✅ CORRECT - Same session ID
+const sessionId = 'user-abc-123';
+formData.append('session_id', sessionId);  // Upload
+fetch('/chat', { body: { session_id: sessionId } });  // Chat - SAME!
+```
+
+**Solution 2: Enable Debug Logging**
+
+Add these lines to see what's happening:
+
+In `api_server.py`, the debug logs will show:
+```python
+[DEBUG] Session ID: 4a98a6bc-48b8-4439-bb5e-f118bfdc6a2e
+[DEBUG] User message: what's this
+[DEBUG] Last hardware: {'component': 'ram', 'confidence': 47.5}
+[DEBUG] All stored hardware: {'4a98a6bc-...': {...}}
+```
+
+Check your API terminal output when testing!
+
+**Solution 3: Verify Form Data**
+
+Make sure frontend sends `session_id` as **form data** (not query param):
+
+```javascript
+// ✅ CORRECT - session_id in FormData
+const formData = new FormData();
+formData.append('file', imageFile);
+formData.append('session_id', sessionId);  // ← Must be in FormData!
+```
+
+**Solution 4: Check Trigger Phrases**
+
+The system only activates for specific phrases:
+- ✅ "what's this", "whats this", "what is this"
+- ✅ "what's that", "whats that", "what is that"
+- ✅ "tell me about this", "explain this"
+- ❌ "hello", "hi there" (generic chat, won't explain hardware)
+
+---
+
+### ⚠️ Gemini API Errors (503, 429, 404)
+
+**Symptom:** API logs show errors like:
+```
+503 ServiceUnavailable
+429 TooManyRequests
+404 NotFound
+```
+
+**Causes & Solutions:**
+
+| Error Code | Meaning | Solution |
+|------------|---------|----------|
+| **503** | Gemini temporarily unavailable | Wait 30s, Phi-2 activates automatically |
+| **429** | Rate limit exceeded | Reduce request frequency, use caching |
+| **404** | Invalid API key/endpoint | Check `config.py` API key is valid |
+
+**Free Tier Limits:**
+- **15 requests/minute** - Wait between rapid calls
+- **1,500 requests/day** - Monitor daily usage
+- **1M requests/month** - Track monthly quota
+
+**Rate Limit Prevention:**
+
+```python
+# Add delay between requests (in your website)
+import time
+time.sleep(4)  # Wait 4 seconds = 15 req/min max
+```
+
+**Good News:** Phi-2 fallback handles errors automatically! Users still get responses! ✅
+
+---
+
+### ⚠️ API Server Won't Start
+
+**Symptom:** `python api_server.py` fails
+
+**Solution 1: Check Dependencies**
+```bash
+pip install fastapi uvicorn python-multipart
+```
+
+**Solution 2: Check Port 8000**
+
+Another program might be using port 8000:
+
+*Windows:*
+```powershell
+# Find what's using port 8000
+netstat -ano | findstr :8000
+
+# Kill the process (replace PID with actual number)
+taskkill /PID <PID> /F
+```
+
+*Linux:*
+```bash
+# Find what's using port 8000
+lsof -i :8000
+
+# Kill the process
+kill -9 <PID>
+```
+
+**Solution 3: Use Different Port**
+
+Edit `api_server.py` bottom line:
+```python
+# Change from:
+uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# To:
+uvicorn.run(app, host="0.0.0.0", port=8080)  # Use 8080 instead
+```
+
+---
+
+### ⚠️ Cloudflare Tunnel Not Working
+
+**Symptom:** `cloudflared.exe` command fails or tunnel disconnects
+
+**Solution 1: Reinstall Cloudflared**
+
+*Windows:*
+```powershell
+# Download latest version
+Invoke-WebRequest -Uri "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -OutFile "C:\Program Files (x86)\cloudflared\cloudflared.exe"
+```
+
+**Solution 2: Check API Server Running**
+
+Tunnel requires API server at `http://localhost:8000` first:
+```
+1. Terminal 1: python api_server.py  ← Start this FIRST
+2. Terminal 2: cloudflared tunnel     ← Then start tunnel
+```
+
+**Solution 3: Firewall Blocking**
+
+Windows Firewall might block cloudflared:
+- Allow through Windows Defender Firewall
+- Or temporarily disable firewall for testing
+
+**Solution 4: Internet Connection**
+
+Tunnel requires stable internet. Check:
+```powershell
+ping cloudflare.com
+```
+
+---
+
 ## 📊 Chapter VII – Understanding Your Results
 
 ### Training Metrics
@@ -1192,7 +1486,7 @@ nvidia-smi -l 1
 ```bash
 # 1. Setup (one-time)
 pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
-pip install transformers sentencepiece pillow google-generativeai
+pip install transformers sentencepiece pillow google-generativeai fastapi uvicorn python-multipart
 python check_gpu.py
 
 # 2. Prepare dataset
@@ -1203,6 +1497,9 @@ python train_vit_tiny.py
 
 # 4. 🌟 USE THE UNIFIED SYSTEM 🌟
 python model_setup.py
+
+# 5. 🌐 HOST AS WEB API (Optional)
+python api_server.py
 ```
 
 **🐧 Linux:**
@@ -1211,7 +1508,7 @@ python model_setup.py
 python3 -m venv ai_env
 source ai_env/bin/activate
 pip install torch torchvision --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
-pip install transformers sentencepiece pillow google-generativeai
+pip install transformers sentencepiece pillow google-generativeai fastapi uvicorn python-multipart
 python3 check_gpu.py
 
 # 2. Prepare dataset
@@ -1222,6 +1519,50 @@ python3 train_vit_tiny.py
 
 # 4. 🌟 USE THE UNIFIED SYSTEM 🌟
 python3 model_setup.py
+
+# 5. 🌐 HOST AS WEB API (Optional)
+python3 api_server.py
+```
+
+### 🌐 API Server Commands (Web Integration)
+
+**Start API Server:**
+```bash
+# Windows
+python api_server.py
+
+# Linux
+python3 api_server.py
+```
+
+**Start Cloudflare Tunnel (Public Access):**
+```powershell
+# Windows - Full command
+& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8000
+
+# Or use the batch script (easier!)
+.\start_tunnel.bat
+```
+
+**API Endpoints Available:**
+- `GET /` - Health check
+- `POST /chat` - Chat with AI (Gemini/Phi-2 automatic routing)
+- `POST /identify` - Identify hardware from image
+- `GET /status` - System status (models loaded, GPU info, accuracy)
+- `POST /clear/{session_id}` - Clear conversation & hardware context
+- `GET /docs` - Interactive API documentation (Swagger UI)
+
+**Test API Locally:**
+```bash
+# Health check
+curl http://localhost:8000/
+
+# System status
+curl http://localhost:8000/status
+
+# Or open in browser
+start http://localhost:8000/docs  # Windows
+xdg-open http://localhost:8000/docs  # Linux
 ```
 
 ### 📋 Complete Workflow Summary
@@ -1232,6 +1573,11 @@ Step 2: Add 20+ images per hardware category to dataset/train/ ✅
 Step 3: python split_dataset.py --split ✅
 Step 4: python train_vit_tiny.py ✅
 Step 5: python model_setup.py ✅ ← START USING YOUR AI!
+
+Optional - Web Integration:
+Step 6: python api_server.py ✅ ← Expose as REST API
+Step 7: Start cloudflare tunnel ✅ ← Public URL hosting
+Step 8: Share URL with website team ✅ ← Vue/React integration
 ```
 
 ---
@@ -1247,6 +1593,10 @@ This sacred project demonstrates thy mastery of:
 - ✅ **GPU acceleration** and VRAM optimization techniques
 - ✅ **Practical AI application** - Real-world hardware identification
 - ✅ **Interactive CLI interface** with mode switching and command system
+- ✅ **REST API development** with FastAPI for web integration
+- ✅ **Context-aware AI** with session management and memory
+- ✅ **Cloud deployment** with Cloudflare Tunnel for public access
+- ✅ **Multi-user support** with independent session tracking
 
 ### ⚔️ What Makes This Project Legendary:
 1. **THREE AI Models United** - Dual chat (Gemini + Phi-2) + Vision classification
@@ -1254,6 +1604,10 @@ This sacred project demonstrates thy mastery of:
 3. **Real-world Application** - Identify actual computer hardware from images
 4. **Automatic Intelligence Routing** - Smart fallback system with zero manual switching
 5. **GPU Optimization** - Smart VRAM management and mixed precision training
+6. **Web API Integration** - FastAPI backend exposing AI via REST endpoints
+7. **Context Memory System** - Remembers uploaded hardware for natural conversations
+8. **Public Deployment** - Cloudflare Tunnel for sharing with teammates/presentation
+9. **Session Management** - Multi-user support with independent contexts
 6. **Modern Architecture** - Latest transformers for both text (Gemini 2.5) and vision (ViT)
 7. **Professional Features** - Status monitoring, conversation history, confidence thresholds
 8. **API Integration** - Demonstrates cloud AI service integration with Google Gemini
