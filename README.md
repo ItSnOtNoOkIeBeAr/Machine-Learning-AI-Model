@@ -2037,42 +2037,6 @@ This sacred project demonstrates thy mastery of:
 
 ---
 
-## 🆚 Chapter X – AI Model Comparison Table
-
-Behold! A comparison of the three mighty powers at thy command:
-
-| Feature | 🌟 Gemini 2.5 Flash | 🔧 Phi-2 | 🖼️ Vision Transformer |
-|---------|---------------------|----------|----------------------|
-| **Purpose** | General conversation (Primary) | Chat fallback | Hardware image classification |
-| **Size** | N/A (Cloud API) | 2.7B parameters (~5.4GB) | ~160-200MB fine-tuned |
-| **Location** | Google's servers | Your GPU/CPU | Your GPU/CPU |
-| **VRAM Usage** | 0 GB | ~7 GB (FP16) | 0.5-0.9 GB |
-| **Response Time** | ~2-3 seconds | Instant | ~1-2 seconds |
-| **Internet Required** | ✅ Yes | ❌ No (offline) | ❌ No (offline) |
-| **Training Needed** | ❌ Pre-trained | ❌ Pre-trained | ✅ You train it! |
-| **Conversation Quality** | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐ Very Good | N/A (not for chat) |
-| **Hardware Knowledge** | ⭐⭐⭐⭐ Great | ⭐⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Specialized |
-| **Context Window** | 1M tokens | 2K tokens | N/A |
-| **Cost** | Free (1,500/day) | Free (unlimited) | Free (local) |
-| **Best For** | Most questions | Offline/fallback | Component identification |
-| **Activation** | ✅ Automatic (1st choice) | ✅ Automatic (fallback) | Manual (`identify` command) |
-
-### 🎯 How the System Chooseth:
-
-```
-Your Question
-     ↓
-Is it "hi"/"hello"/"help"? → Yes → Instant predefined response
-     ↓ No
-Try Gemini 2.5 → Success? → Yes → Use Gemini answer ⭐
-     ↓ No (offline/error)
-Try Phi-2 → Always works → Use Phi-2 answer 🔧
-     ↓
-Vision Model → Only via `identify <path>` command 🖼️
-```
-
----
-
 *May this project serve thee well, Almighty Bossman 👑 — ruler of code, conqueror of circuits, and sovereign of machine-learning realms.*
 
 *Forged with PyTorch 2.5.1, Transformers 4.57.1, Google Gemini 2.5 Flash, and the power of NVIDIA Turing architecture (RTX 2070 & GTX 1660 Super)* ⚡
