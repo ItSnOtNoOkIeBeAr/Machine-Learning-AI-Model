@@ -20,8 +20,8 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 - [Chapter VI - Troubleshooting Guide](#️-chapter-vi--remedies-for-troublesome-spirits)
 - [Chapter VII - Understanding Your Results](#-chapter-vii--understanding-your-results)
 - [Chapter VIII - The Road Yet Ahead](#-chapter-viii--the-road-yet-ahead)
-- [Chapter IX - AI Model Comparison](#-chapter-ix--ai-model-comparison-table)
-- [Chapter X - The Sacred Tech Stack (What Powers This Realm)](#-chapter-x--the-sacred-tech-stack)
+- [Chapter IX - The Sacred Tech Stack (What Powers This Realm)](#-chapter-ix--the-sacred-tech-stack)
+- [Chapter X - AI Model Comparison](#-chapter-x--ai-model-comparison-table)
 - [Quick Command Reference](#-quick-command-reference)
 - [For Your CSST 101 Final Project](#-for-your-csst-101-final-project)
 
@@ -1479,7 +1479,7 @@ ping cloudflare.com
 
 ---
 
-## 🏛️ Chapter X – The Sacred Tech Stack
+## 🏛️ Chapter IX – The Sacred Tech Stack
 
 **Behold the mystical artifacts and ancient powers that forge this legendary AI system!** ⚔️✨
 
@@ -2000,7 +2000,7 @@ This sacred project demonstrates thy mastery of:
 
 ---
 
-## 🆚 Chapter IX – AI Model Comparison Table
+## 🆚 Chapter X – AI Model Comparison Table
 
 Behold! A comparison of the three mighty powers at thy command:
 
