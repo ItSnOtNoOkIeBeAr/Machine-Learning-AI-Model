@@ -21,6 +21,7 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 - [Chapter VII - Understanding Your Results](#-chapter-vii--understanding-your-results)
 - [Chapter VIII - The Road Yet Ahead](#-chapter-viii--the-road-yet-ahead)
 - [Chapter IX - AI Model Comparison](#-chapter-ix--ai-model-comparison-table)
+- [Chapter X - The Sacred Tech Stack (What Powers This Realm)](#-chapter-x--the-sacred-tech-stack)
 - [Quick Command Reference](#-quick-command-reference)
 - [For Your CSST 101 Final Project](#-for-your-csst-101-final-project)
 
@@ -1475,6 +1476,266 @@ ping cloudflare.com
    - Voice chat integration
    - Batch image processing
    - Hardware recommendation system
+
+---
+
+## 🏛️ Chapter X – The Sacred Tech Stack
+
+**Behold the mystical artifacts and ancient powers that forge this legendary AI system!** ⚔️✨
+
+### 📚 **Languages of Power**
+
+| Language | Version | Purpose | Sacred Runes |
+|----------|---------|---------|--------------|
+| **Python** | 3.11 | Core AI/ML operations, model training, API backend | 🐍 |
+| **JavaScript** | ES6+ | Vue.js frontend integration (thy website) | 🌐 |
+
+---
+
+### 🤖 **The Three Great AI Oracles**
+
+#### **1. Google Gemini 2.5 Flash** ☁️🌟
+- **Provider:** Google AI Studio
+- **Role:** Primary chat oracle (cloud-based)
+- **Architecture:** Transformer-based multimodal AI
+- **Context Window:** 1 million tokens (vast memory!)
+- **Capabilities:** Natural language understanding, hardware explanations, reasoning
+- **Rate Limits:** 
+  - 15 requests/minute
+  - 1,500 requests/day
+  - 1,000,000 requests/month
+- **Cost:** FREE (educational/personal use)
+
+#### **2. Microsoft Phi-2** 🔧💪
+- **Provider:** Hugging Face Transformers
+- **Role:** Local fallback oracle (offline support)
+- **Architecture:** Transformer language model
+- **Parameters:** 2.7 billion
+- **Precision:** FP16 (half-precision for speed)
+- **VRAM Usage:** 5.4GB weights + 1-3GB runtime
+- **Special Power:** Works without internet!
+
+#### **3. Google Vision Transformer (ViT)** 👁️🎯
+- **Provider:** Hugging Face Transformers
+- **Base Model:** `google/vit-base-patch16-224-in21k`
+- **Role:** Hardware identification from images
+- **Architecture:** Vision Transformer (attention-based)
+- **Training Status:** Fine-tuned by thee!
+- **Validation Accuracy:** 82.50%
+- **Classes Detected:** 5 (CPU, GPU, Motherboard, PSU, RAM)
+- **Confidence Threshold:** 25%
+- **Image Resolution:** 224×224 pixels
+
+---
+
+### 🛠️ **Frameworks & Sacred Libraries**
+
+#### **Deep Learning Arsenal** ⚡
+```
+PyTorch 2.5.1          - Main deep learning framework (tensor operations, GPU)
+Transformers 4.57.1    - Hugging Face library (pre-trained models)
+torchvision            - Image preprocessing & augmentation
+sentencepiece          - Tokenization for Phi-2
+```
+
+#### **Web Sorcery** 🌐
+```
+FastAPI                - Modern REST API framework (async support)
+Uvicorn                - Lightning-fast ASGI server
+Pydantic               - Data validation & serialization
+python-multipart       - File upload handling (multipart/form-data)
+```
+
+#### **Image Manipulation** 🖼️
+```
+Pillow (PIL)           - Image loading, resizing, format conversion
+```
+
+#### **Cloud Integration** ☁️
+```
+google-generativeai    - Official Gemini API client
+```
+
+---
+
+### ⚡ **Optimizations & Dark Arts**
+
+#### **GPU Acceleration** 🚀
+- **CUDA Version:** 12.1
+- **Automatic Device Detection:** Switches between GPU/CPU
+- **Mixed Precision Training:** FP16 for 2x speed
+- **Hardware Used:** NVIDIA Turing architecture
+  - GTX 1660 Super (6GB VRAM)
+  - RTX 2070 (8GB VRAM)
+
+#### **Model Loading Magic** 🧙‍♂️
+```python
+device_map="auto"              # Smart GPU memory allocation
+torch.float16                  # Half-precision inference
+Preloading at startup          # Models loaded once, kept in memory
+```
+
+#### **Data Augmentation Spells** 🎨
+```python
+RandomHorizontalFlip()         # Mirror images randomly
+RandomRotation(15°)            # Rotate up to 15 degrees
+ColorJitter()                  # Adjust brightness/contrast
+```
+
+#### **Memory Management** 💾
+- Gradient accumulation: Disabled (sufficient VRAM)
+- Temporary file cleanup: Auto-delete after processing
+- Conversation history: Last 6 exchanges only (prevents memory bloat)
+- Session isolation: Independent memory per user
+
+#### **API Performance Tricks** ⚡
+```python
+async def                      # Asynchronous endpoints (non-blocking)
+CORS enabled                   # Cross-origin requests for Vue
+Model preloading              # Load all models at startup
+Debug logging                 # Troubleshooting insights
+```
+
+---
+
+### 🌐 **Deployment & Hosting Realm**
+
+#### **Local Server Configuration** 🏰
+```
+Host: 0.0.0.0                  # Listen on all network interfaces
+Port: 8000                     # HTTP endpoint
+Protocol: HTTP/1.1             # Standard web protocol
+```
+
+#### **Cloud Tunnel Portal** ☁️✨
+```
+Service: Cloudflare Tunnel (cloudflared)
+Protocol: QUIC                 # Modern UDP-based transport
+Public Access: HTTPS           # Automatic SSL/TLS encryption
+Static IP: Not required        # Dynamic tunnel URL
+Version: 2025.8.1
+```
+
+---
+
+### 🗄️ **Data Kingdom**
+
+#### **Dataset Arsenal** 📊
+```
+Total Images: 500+             # 100+ per hardware class
+Training Split: 80%            # For learning patterns
+Validation Split: 20%          # For testing accuracy
+Formats: JPG, PNG              # Common image formats
+Resolution: 224×224            # Standardized size
+Augmentation: Real-time        # Applied during training
+```
+
+#### **Model Storage** 💾
+```
+Trained Weights: models/best_vit_model.pth
+Size: ~1GB (Git LFS tracked)
+Contents: State dict, accuracy, metadata
+```
+
+#### **Session Management** 🔐
+```
+Storage: In-memory dictionaries (Python RAM)
+Conversation History: Per session_id
+Hardware Context: Per session_id
+Persistence: None (resets on server restart)
+```
+
+---
+
+### 🔄 **Architecture Patterns**
+
+#### **1. Automatic Fallback Chain** 🔗
+```
+User Question
+    ↓
+Predefined Responses? → YES → Return instant answer
+    ↓ NO
+Gemini API Available? → YES → Cloud response
+    ↓ NO
+Phi-2 Local Model → Offline response
+```
+
+#### **2. Context-Aware Flow** 🧠
+```
+1. User uploads image → classify_hardware()
+2. Store: last_identified_hardware[session_id] = {component, confidence}
+3. User types "what's this"
+4. Detect trigger phrase → retrieve context
+5. Generate explanation → return formatted response
+```
+
+#### **3. REST API Endpoints** 📡
+```
+POST   /chat              - Chat with AI (auto-routing)
+POST   /identify          - Hardware identification
+GET    /status            - System health check
+POST   /clear/{id}        - Clear session history
+GET    /docs              - Interactive API documentation (Swagger UI)
+GET    /                  - Health check endpoint
+```
+
+#### **4. Multi-User Architecture** 👥
+```
+Session ID: UUID v4 (unique per user)
+Isolation: Separate conversations & hardware contexts
+Concurrency: FastAPI handles parallel requests
+Thread-safe: Dictionary operations atomic
+```
+
+---
+
+### 📦 **Complete Dependency Scroll**
+
+```txt
+# Core Deep Learning
+torch==2.5.1
+torchvision
+transformers==4.57.1
+sentencepiece
+
+# Image Processing
+pillow
+
+# API Framework
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# Cloud Integration
+google-generativeai
+
+# System Requirements
+CUDA 12.1 (automatic with PyTorch)
+NVIDIA GPU (6-8GB VRAM recommended)
+Windows 11 or Linux
+Python 3.11
+16GB+ RAM
+```
+
+---
+
+### 🎯 **Sacred Statistics**
+
+| Metric | Value | Achievement |
+|--------|-------|-------------|
+| **Vision Accuracy** | 82.50% | ✅ Excellent |
+| **Total AI Models** | 3 | 🤖 Gemini + Phi-2 + ViT |
+| **API Endpoints** | 6 | 📡 RESTful design |
+| **Session Support** | Unlimited | 👥 Multi-user ready |
+| **Offline Support** | YES | 🔧 Phi-2 fallback |
+| **Context Memory** | Per-session | 🧠 Smart responses |
+| **Training Speed** | GPU 2-3x faster | ⚡ CUDA accelerated |
+| **Free Tier Limits** | 1.5k/day | ☁️ Gemini API |
+
+---
+
+**These mystical powers combine to create thy legendary AI Hardware Assistant!** 🏆👑⚡
 
 ---
 
