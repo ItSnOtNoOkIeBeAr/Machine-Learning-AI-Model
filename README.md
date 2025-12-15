@@ -21,7 +21,6 @@ In this sacred project, thou shalt wield the powers of PyTorch and Hugging Face,
 - [Chapter VII - Understanding Your Results](#-chapter-vii--understanding-your-results)
 - [Chapter VIII - The Road Yet Ahead](#-chapter-viii--the-road-yet-ahead)
 - [Chapter IX - The Sacred Tech Stack (What Powers This Realm)](#-chapter-ix--the-sacred-tech-stack)
-- [Chapter X - AI Model Comparison](#-chapter-x--ai-model-comparison-table)
 - [Quick Command Reference](#-quick-command-reference)
 - [For Your CSST 101 Final Project](#-for-your-csst-101-final-project)
 
@@ -430,6 +429,44 @@ Thou needest not worry about which model answers thee! The system chooseth wisel
 2. Sign in with thy Google account
 3. Click **"Get API key"** → **"Create API key in new project"**
 4. Copy the key and replace it in `config.py`
+
+---
+
+## 🆚 Chapter II.7 – AI Model Comparison Table
+
+Behold! A comparison of the three mighty powers at thy command:
+
+| Feature | 🌟 Gemini 2.5 Flash | 🔧 Phi-2 | 🖼️ Vision Transformer |
+|---------|---------------------|----------|----------------------|
+| **Purpose** | General conversation (Primary) | Chat fallback | Hardware image classification |
+| **Size** | N/A (Cloud API) | 2.7B parameters (~5.4GB) | ~160-200MB fine-tuned |
+| **Location** | Google's servers | Your GPU/CPU | Your GPU/CPU |
+| **VRAM Usage** | 0 GB | ~7 GB (FP16) | 0.5-0.9 GB |
+| **Response Time** | ~2-3 seconds | Instant | ~1-2 seconds |
+| **Internet Required** | ✅ Yes | ❌ No (offline) | ❌ No (offline) |
+| **Training Needed** | ❌ Pre-trained | ❌ Pre-trained | ✅ You train it! |
+| **Conversation Quality** | ⭐⭐⭐⭐⭐ Excellent | ⭐⭐⭐⭐ Very Good | N/A (not for chat) |
+| **Hardware Knowledge** | ⭐⭐⭐⭐ Great | ⭐⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Specialized |
+| **Context Window** | 1M tokens | 2K tokens | N/A |
+| **Cost** | Free (1,500/day) | Free (unlimited) | Free (local) |
+| **Best For** | Most questions | Offline/fallback | Component identification |
+| **Activation** | ✅ Automatic (1st choice) | ✅ Automatic (fallback) | Manual (`identify` command) |
+
+### 🎯 How the System Chooseth:
+
+```
+Your Question
+     ↓
+Is it "hi"/"hello"/"help"? → Yes → Instant predefined response
+     ↓ No
+Try Gemini 2.5 → Success? → Yes → Use Gemini answer ⭐
+     ↓ No (offline/error)
+Try Phi-2 → Always works → Use Phi-2 answer 🔧
+     ↓
+Vision Model → Only via `identify <path>` command 🖼️
+```
+
+**Thou needest not choose!** The system automatically uses the best available AI. Just type naturally. 🎯
 
 ---
 
@@ -2033,8 +2070,6 @@ Try Phi-2 → Always works → Use Phi-2 answer 🔧
      ↓
 Vision Model → Only via `identify <path>` command 🖼️
 ```
-
-**Thou needest not choose!** The system automatically uses the best available AI. Just type naturally. 🎯
 
 ---
 
