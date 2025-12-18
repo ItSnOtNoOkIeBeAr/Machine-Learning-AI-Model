@@ -136,18 +136,31 @@ def unified_chat_response(gemini_model, phi2_model, phi2_tokenizer, user_message
         tuple: (response_text, source) where source is 'predefined', 'gemini', or 'phi2'
     """
     # Pre-defined responses (instant, no API needed)
+    # NOTE: Greetings handled separately with exact match to avoid false triggers
     predefined_responses = {
         "who made you": "I was created by a student at LSPU as part of a CSST 101 final project. I'm an AI system that combines chat capabilities with hardware identification!",
         "who created you": "I was created by a student at LSPU as part of a CSST 101 final project!",
         "what are you": "I'm an AI assistant powered by Gemini and Phi-2, with Vision Transformer for hardware identification!",
         "what can you do": "I can chat naturally about any topic and identify computer hardware from images. Type 'identify <image_path>' to classify components!",
-        "hello": "Hello! 👋 I'm your AI assistant. Ask me anything or use 'identify <image_path>' to classify hardware!",
-        "hi": "Hi there! 👋 I can chat about any topic and identify computer hardware. What can I help you with?",
         "help": "💬 Chat: Type your message\n🖼️ Identify: identify <path>\n⚙️ Commands: 'status', 'clear', 'quit'",
     }
     
     # Check for pre-defined responses
     user_lower = user_message.lower().strip()
+    
+    # Handle greetings with EXACT MATCH only (prevents "architecture" triggering "hi")
+    if user_lower in ["hello", "hi", "hey", "hello!", "hi!", "hey!"]:
+        greetings = {
+            "hello": "Hello! 👋 I'm your AI assistant. Ask me anything or use 'identify <image_path>' to classify hardware!",
+            "hello!": "Hello! 👋 I'm your AI assistant. Ask me anything or use 'identify <image_path>' to classify hardware!",
+            "hi": "Hi there! 👋 I can chat about any topic and identify computer hardware. What can I help you with?",
+            "hi!": "Hi there! 👋 I can chat about any topic and identify computer hardware. What can I help you with?",
+            "hey": "Hey! 👋 What can I help you with today?",
+            "hey!": "Hey! 👋 What can I help you with today?",
+        }
+        return greetings.get(user_lower, greetings["hi"]), "predefined"
+    
+    # Check other predefined responses (these are longer phrases, less likely to false-match)
     for question, answer in predefined_responses.items():
         if question in user_lower:
             return answer, "predefined"
