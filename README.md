@@ -784,8 +784,8 @@ python api_server.py
 ```
 ================================================================================
 ✅ All models loaded successfully!
-📡 API ready at http://localhost:8000
-📖 Documentation at http://localhost:8000/docs
+📡 API ready at http://localhost:8001
+📖 Documentation at http://localhost:8001/docs
 ================================================================================
 ```
 
@@ -800,7 +800,7 @@ Open **PowerShell Terminal 2** (new window) and chant:
 ```powershell
 cd "C:\Users\Matthew Dee\Documents\School work\LSPU\School works\3rd year\1st sem\CSST 101\Final Project\AI Model"
 
-& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8000
+& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8001
 ```
 
 **The oracle shall reveal thy public URL:**
@@ -1455,7 +1455,7 @@ Invoke-WebRequest -Uri "https://github.com/cloudflare/cloudflared/releases/lates
 
 **Solution 2: Check API Server Running**
 
-Tunnel requires API server at `http://localhost:8000` first:
+Tunnel requires API server at `http://localhost:8001` first:
 ```
 1. Terminal 1: python api_server.py  ← Start this FIRST
 2. Terminal 2: cloudflared tunnel     ← Then start tunnel
@@ -1836,7 +1836,7 @@ python3 api_server.py
 **Start Cloudflare Tunnel (Public Access):**
 ```powershell
 # Windows - Full command
-& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8000
+& "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:8001
 
 # Or use the batch script (easier!)
 .\start_tunnel.bat
@@ -1853,14 +1853,14 @@ python3 api_server.py
 **Test API Locally:**
 ```bash
 # Health check
-curl http://localhost:8000/
+curl http://localhost:8001/
 
 # System status
-curl http://localhost:8000/status
+curl http://localhost:8001/status
 
 # Or open in browser
-start http://localhost:8000/docs  # Windows
-xdg-open http://localhost:8000/docs  # Linux
+start http://localhost:8001/docs  # Windows
+xdg-open http://localhost:8001/docs  # Linux
 ```
 
 ### 📋 Complete Workflow Summary
