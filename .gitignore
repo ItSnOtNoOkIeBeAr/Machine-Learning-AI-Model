@@ -1,6 +1,7 @@
 # Model files (use Git LFS)
 *.pth
 models/
+.config.py
 
 # Python cache
 __pycache__/
