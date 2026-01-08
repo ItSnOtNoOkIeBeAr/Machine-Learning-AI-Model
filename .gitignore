@@ -28,3 +28,4 @@ Thumbs.db
 
 # NOTE: config.py is NOT ignored during development
 # Remember to add it back to .gitignore before public release!
+config.py
